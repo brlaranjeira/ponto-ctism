@@ -1,3 +1,5 @@
 .btn-hl{
-    border: 3px dashed white;
+    border: 3px dashed black;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
