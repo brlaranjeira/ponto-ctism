@@ -14,7 +14,7 @@ if (!isset($usuario)) {
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="./main.php">Ponto Bolsistas</a>
+			<a class="navbar-brand" href="main.php">Ponto Bolsistas</a>
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				<span class="sr-only"></span>
 				<span class="icon-bar"></span>
