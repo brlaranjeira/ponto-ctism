@@ -46,8 +46,8 @@ class Ponto extends EntidadeAbstrata {
 	protected static $dicionario = [
 		'ip' => 'IP',
 		'usuario' => 'UID',
-		'event' => 'EVENT',
-		'timestamp' => 'TIMESTAMP',
+		'event' => 'EVT',
+		'timestamp' => 'DTHR',
 		'just' => 'JUST'
 	];
 	protected static $getters = [
