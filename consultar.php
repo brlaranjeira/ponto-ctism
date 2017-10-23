@@ -11,14 +11,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Ponto Bolsistas CTISM">
-    <script src="css/bootstrap/bootstrap.min.css"></script>
     <meta name="author" content="Noronha">
     <link rel="icon" href="img/CTISM.ico">
     <title>Ponto Bolsistas</title>
-    
-    
-
 </head>
 <body>
 
@@ -103,7 +103,7 @@
 	                            Ponto::getColumnName('event') . '= \'' . Ponto::PONTO_ABONO . '\'',
 	                            'TIME('. Ponto::getColumnName('timestamp'). ')'));
                     if (empty($pontos)) {
-                        die ('<tr><td colspan="4">Nenhum registro encontrado</td></tr>');
+                        echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
                     }
                     $anterior = null;
                     foreach ( $pontos as $ponto ) {
