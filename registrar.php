@@ -35,8 +35,12 @@ require_once (__DIR__ . '/dao/Usuario.php');
 
 if (isset($_POST) && !empty($_POST)) {
     $ponto = new Ponto();
-    $ponto->setIp()
+	$ponto->setIp($_SERVER['REMOTE_ADDR']);
+	$ponto->setUsuario($usuario);
     $ponto->setEvent($_POST['evt']);
+    if ($ponto->save()) {
+        $msg = 'Evento registrado!';
+    }
     
 }
 
@@ -46,29 +50,29 @@ if (isset($_POST) && !empty($_POST)) {
 
 <div class="container">
     <?
-    $uidNumber = $usuario->getUidNumber();
-    
+        $uidNumber = $usuario->getUidNumber();
         
         $ultimo = Ponto::getByAttr(
-                array('usuario','event'),
-                array ($uidNumber,Ponto::PONTO_ABONO),
-                array('=','<>'),
-                'timestamp',
-                'DESC',
-                1
-            );
+            array('usuario','event'),
+            array ($uidNumber,Ponto::PONTO_ABONO),
+            array('=','<>'),
+            'timestamp',
+            'DESC',
+            1
+        );
         $hlEntrada = true;
         if (isset($ultimo) && !empty($ultimo) && $ultimo[0]->getTimestamp(Ponto::TS_DATA) == date('d/m/Y')) {
             $hlEntrada = $ultimo[0]->getEvent() == Ponto::PONTO_SAIDA;
         }
-        echo '';
     ?>
+    <?=isset($msg)?$msg:''?>
     <form method="post" action="">
         <input type="hidden" name="evt" value="<?=Ponto::PONTO_ENTRADA?>">
-        <button class="btn btn-lg btn-primary btn-block <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
+        <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
     </form>
-    <input type="hidden" name="evt" value="<?=Ponto::PONTO_SAIDA?>">
-        <button class="btn btn-lg btn-primary btn-block <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
+    <form method="post" action="">
+        <input type="hidden" name="evt" value="<?=Ponto::PONTO_SAIDA?>">
+        <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
     </form>
 </div>
 </body>
