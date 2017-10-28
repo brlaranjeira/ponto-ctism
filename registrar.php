@@ -34,8 +34,9 @@ require_once (__DIR__ . '/dao/Usuario.php');
 
 
 if (isset($_POST) && !empty($_POST)) {
+	$usuario = Usuario::restoreFromSession();
     $ponto = new Ponto();
-	$ponto->setIp($_SERVER['REMOTE_ADDR']);
+	$ponto->setIp();
 	$ponto->setUsuario($usuario);
     $ponto->setEvent($_POST['evt']);
     if ($ponto->save()) {

@@ -6,6 +6,7 @@
  * Time: 10:40 AM
  */
 require_once (__DIR__ . '/../dao/Usuario.php');
+
 $usuario = Usuario::restoreFromSession();
 if (!isset($usuario)) {
     header('Location: ' . './login.php');

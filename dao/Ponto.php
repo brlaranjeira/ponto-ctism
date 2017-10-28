@@ -66,8 +66,8 @@ class Ponto extends EntidadeAbstrata {
 	/**
 	 * @param mixed $ip
 	 */
-	public function setIp( $ip ) {
-		$this->ip = $ip;
+	public function setIp( $ip=null ) {
+		$this->ip = isset($ip) ? $ip : $_SERVER['REMOTE_ADDR'];
 	}
 	
 	/**

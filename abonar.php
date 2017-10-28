@@ -25,9 +25,11 @@
 <?
 include "./fragment/header.php";
 if (!empty($_POST)) {
-    require_once (__DIR__ . '/dao/Ponto.php');
-    $ponto = new Ponto();
-	$ponto->setIp($_SERVER['REMOTE_ADDR']);
+	require_once (__DIR__ . '/dao/Ponto.php');
+	require_once (__DIR__ . '/dao/Usuario.php');
+	$usuario = Usuario::restoreFromSession();
+	$ponto = new Ponto();
+	$ponto->setIp();
 	$ponto->setUsuario($usuario);
 	$ponto->setEvent(Ponto::PONTO_ABONO);
 	$dtParts = explode('/',$_POST['dataabono']);
