@@ -26,9 +26,35 @@
 <?
 include "./fragment/header.php";
 require_once (__DIR__ . '/dao/Ponto.php');
+require_once (__DIR__ . '/dao/Usuario.php');
+
+if (isset($_POST) && ! empty($_POST)) {
+	
+    $usuario = Usuario::restoreFromSession();
+    $tsParts = explode(' ',$_POST['registro-dthr']);
+    $dtParts = explode('/',$tsParts[0]);
+    $dt = $dtParts[2] . '-' . $dtParts[1] . '-' . $dtParts[0];
+    $hr = $tsParts[1] . ':00';
+    
+	$ponto = new Ponto();
+	$ponto->setIp();
+	$ponto->setUsuario($usuario);
+	$ponto->setEvent($_POST['registro-evt']);
+	
+	$ponto->setTimestamp("$dt $hr");
+	$ponto->setJust($_POST['registro-motivo']);
+	
+	if ( $ponto->save() ) {
+		$msg = 'Justificativa registrada/solicitada.';
+	}
+	
+}
+
+
 ?>
 
 <div class="container">
+	<?=isset($msg) ? $msg : ''?>
     <form action="" method="post">
         <div class="row">
             <div class="col-md-6 col-xs-12 form-group">
@@ -41,6 +67,12 @@ require_once (__DIR__ . '/dao/Ponto.php');
             <div class="col-md-6 col-xs-12 form-group">
                 <label for="registro-dthr">Data e Hora</label>
                 <input name="registro-dthr" id="registro-dthr" type="text" class="form-control input-data" maxlength="16" placeholder="DD/MM/AAAA hh:mm">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 form-group">
+                <label for="registro-motivo">Motivo</label>
+                <textarea class="form-control" name="registro-motivo" id="registro-motivo"></textarea>
             </div>
         </div>
         <div class="row">
