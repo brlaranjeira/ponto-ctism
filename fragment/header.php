@@ -29,6 +29,7 @@ if (!isset($usuario)) {
 				<li class="active"><a href="registrar.php">Registrar</a></li>
 				<li class="active"><a href="justificar.php">Justificar</a></li>
 				<li class="active"><a href="abonar.php">Abonar horas</a></li>
+				<li class="active"><a href="deferir.php">Deferir registros</a></li>
 			</ul>
 		</div>
 	</div>
