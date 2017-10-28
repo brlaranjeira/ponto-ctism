@@ -274,7 +274,7 @@ class Usuario implements Serializable {
 	}
 	
 	public function saveToSession() {
-		session_start();
+		(session_status() != PHP_SESSION_ACTIVE) and session_start();
 		$_SESSION['ctism_user'] = serialize($this);
 	}
 
@@ -285,8 +285,7 @@ class Usuario implements Serializable {
     }
 
 	public static function restoreFromSession() {
-		session_start();
-		
+		(session_status() != PHP_SESSION_ACTIVE) and session_start();
 		return isset($_SESSION['ctism_user'])
 			? Usuario::unserialize($_SESSION['ctism_user'])
 			: null;
