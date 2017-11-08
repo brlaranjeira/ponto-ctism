@@ -29,6 +29,15 @@ class Ponto extends EntidadeAbstrata {
 	 * @var string
 	 */
 	private $just;
+	/**
+	 * @var boolean
+	 */
+	private $deferido;
+	
+	/**
+	 * @var Usuario
+	 */
+	private $usuarioDeferidor;
 	
 	const TS_DATA = 0;
 	const TS_HORARIO = 1;
@@ -44,14 +53,17 @@ class Ponto extends EntidadeAbstrata {
 	
 	protected static $tbName = 'ponto';
 	protected static $dicionario = [
-		'ip' => 'IP',
-		'usuario' => 'UID',
-		'event' => 'EVT',
-		'timestamp' => 'DTHR',
-		'just' => 'JUST'
+		'ip' => 'ip',
+		'usuario' => 'uid',
+		'event' => 'evt',
+		'timestamp' => 'dthr',
+		'just' => 'just',
+		'deferido' => 'deferido',
+		'usuarioDeferidor' => 'uid_deferidor'
 	];
 	protected static $getters = [
-		'usuario' => 'getUsrUidNumber'
+		'usuario' => 'getUsrUidNumber',
+		'usuarioDeferidor' => 'getUsrDeferidorUidNumber'
 	];
 	
 	protected static $idName = 'ID';
@@ -140,6 +152,42 @@ class Ponto extends EntidadeAbstrata {
 	public function setJust( $just ) {
 		$this->just = $just;
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isDeferido() {
+		return $this->deferido;
+	}
+	
+	/**
+	 * @param bool $deferido
+	 */
+	public function setDeferido( $deferido ) {
+		$this->deferido = $deferido;
+	}
+	
+	/**
+	 * @return Usuario
+	 */
+	public function getUsuarioDeferidor() {
+		return $this->usuarioDeferidor;
+	}
+	
+	/**
+	 * @param Usuario $usuarioDeferidor
+	 */
+	public function setUsuarioDeferidor( $usuarioDeferidor ) {
+		require_once (__DIR__ . '/Usuario.php');
+		$this->usuarioDeferidor = is_object( $usuarioDeferidor ) ? $usuarioDeferidor : Usuario::getByUidNumber($usuarioDeferidor);
+	}
+	
+	public function getUsrDeferidorUidNumber() {
+		require_once (__DIR__ . '/Usuario.php');
+		return $this->usuarioDeferidor->getUidNumber();
+	}
+	
+	
 	
 	
 	
