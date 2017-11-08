@@ -156,7 +156,7 @@ class Ponto extends EntidadeAbstrata {
 	/**
 	 * @return bool
 	 */
-	public function isDeferido() {
+	public function getDeferido() {
 		return $this->deferido;
 	}
 	
@@ -178,13 +178,21 @@ class Ponto extends EntidadeAbstrata {
 	 * @param Usuario $usuarioDeferidor
 	 */
 	public function setUsuarioDeferidor( $usuarioDeferidor ) {
-		require_once (__DIR__ . '/Usuario.php');
-		$this->usuarioDeferidor = is_object( $usuarioDeferidor ) ? $usuarioDeferidor : Usuario::getByUidNumber($usuarioDeferidor);
+		if (isset($usuarioDeferidor)) {
+			require_once (__DIR__ . '/Usuario.php');
+			$this->usuarioDeferidor = is_object( $usuarioDeferidor ) ? $usuarioDeferidor : Usuario::getByUidNumber($usuarioDeferidor);
+		}
 	}
 	
 	public function getUsrDeferidorUidNumber() {
 		require_once (__DIR__ . '/Usuario.php');
-		return $this->usuarioDeferidor->getUidNumber();
+		if (isset($this->usuarioDeferidor)) {
+			if (!is_object($this->usuarioDeferidor)) {
+				$this->setUsuarioDeferidor($this->usuarioDeferidor);
+			}
+			return $this->usuarioDeferidor->getUidNumber();
+		}
+		return null;
 	}
 	
 	
