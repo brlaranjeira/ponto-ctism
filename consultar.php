@@ -77,7 +77,7 @@
         </form>
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-striped">
+                <table id="tb-registros" class="table table-striped">
                     <thead>
                     <tr>
                         <th>Dia</th>
@@ -107,14 +107,17 @@
                     }
                     $anterior = null;
                     foreach ( $pontos as $ponto ) {
+	                    $hora = $ponto->getTimestamp(Ponto::TS_HORARIO);
+	                    $btnDelete = '<button class="btn-delete btn btn-danger"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+	                    $hora .= " $btnDelete";
                         switch ($ponto->getEvent()) {
                             case Ponto::PONTO_ENTRADA:
-                                ?><tr><td><?=$ponto->getTimestamp(Ponto::TS_DATA)?></td>
-                                <td><?=$ponto->getTimestamp(Ponto::TS_HORARIO)?></td><?
+                                $data = $ponto->getTimestamp(Ponto::TS_DATA);
+                                echo "<tr><td>$data</td><td>$hora</td>";
                                 break;
                             case Ponto::PONTO_SAIDA:
-                                ?><td><?=$ponto->getTimestamp(Ponto::TS_HORARIO)?></td><?
-                                ?><td><?='diff'?></td></tr><?
+                                $diff = 'diff';
+                                echo "<td>$hora</td><td>$diff</td></tr>";
                                 break;
                             default: //abono
                                 break;
@@ -131,4 +134,5 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
 </html>
