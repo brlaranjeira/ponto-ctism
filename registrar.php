@@ -65,6 +65,7 @@ if (isset($_POST) && !empty($_POST)) {
         if (isset($ultimo) && !empty($ultimo) && $ultimo[0]->getTimestamp(Ponto::TS_DATA) == date('d/m/Y')) {
             $hlEntrada = $ultimo[0]->getEvent() == Ponto::PONTO_SAIDA;
         }
+
     ?>
     <?=isset($msg)?$msg:''?>
     <form method="post" action="">

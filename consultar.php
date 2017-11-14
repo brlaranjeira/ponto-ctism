@@ -105,22 +105,79 @@
                     if (empty($pontos)) {
                         echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
                     }
-                    $anterior = null;
+                   $anterior    =   null;
+                    echo '<tr>';
                     foreach ( $pontos as $ponto ) {
-                        switch ($ponto->getEvent()) {
-                            case Ponto::PONTO_ENTRADA:
-                                ?><tr><td><?=$ponto->getTimestamp(Ponto::TS_DATA)?></td>
-                                <td><?=$ponto->getTimestamp(Ponto::TS_HORARIO)?></td><?
-                                break;
-                            case Ponto::PONTO_SAIDA:
-                                ?><td><?=$ponto->getTimestamp(Ponto::TS_HORARIO)?></td><?
-                                ?><td><?='diff'?></td></tr><?
-                                break;
-                            default: //abono
-                                break;
+
+                        if ($ponto->getEvent() == 'Entrada') {
+
+                            if(  (isset($anterior) && $anterior->getEvent() == 'Entrada'))  /*||  ( isset($anterior) && $ponto->getTimestamp(Ponto::TS_DATA)   != $anterior->getTimestamp(Ponto::TS_DATA)))*/{
+                                echo '<td>';
+                                echo 'Justifique sua saida';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                            echo '<td>';
+                            echo $ponto->getTimestamp(Ponto::TS_DATA);
+                            echo '</td>';
+                            echo '<td>';
+                            echo   $ponto->getTimestamp(Ponto::TS_HORARIO);
+                            echo '</td>';
+
                         }
-                        $anterior = $ponto;
-                    } ?>
+
+                       elseif  ($ponto->getEvent() == 'Saida') {
+                           if (isset($anterior) && $anterior->getEvent() == 'Saida') {
+                               echo '<td>';
+                               echo $ponto->getTimestamp(Ponto::TS_DATA);
+                               echo '</td>';
+                               echo '<td>';
+                               echo 'Justifique sua Entrada';
+                               echo '</td>';
+
+                           } elseif (isset($anterior) && $anterior->getEvent() == 'Entrada' && $ponto->getTimestamp(Ponto::TS_DATA) != $anterior->getTimestamp(Ponto::TS_DATA)) {
+                               echo '<td>';
+                               echo 'Justifique sua Saida';
+                               echo '</td>';
+                               //echo '<td>';
+                               //echo $ponto->getTimestamp(Ponto::TS_DATA);
+                              // echo '</td>';
+                               echo '</tr>';
+                               echo '<td>';
+                               echo $ponto->getTimestamp(Ponto::TS_DATA);
+                               echo '</td>';
+                               echo '<td>';
+                               echo 'Justifique sua Entrada';
+                               echo '</td>';
+                        }
+                            echo '<td>';
+                            echo $ponto->getTimestamp(Ponto::TS_HORARIO);
+                            echo '</td>';
+                            echo '</tr>';
+                            if( $ponto->getEvent() == 'Saida'){
+                                $anterior = $ponto;
+                                //  echo 'teste';
+                            }
+                        }
+                       /* if( $anterior->getEvent() == 'Entrada'  &&  $ponto->getEvent()  == 'Entrada'){
+                            echo '<td>';
+                            echo 'Justifique sua saida';
+                            echo '</td>';
+                            echo '</tr>';
+                        }*/
+
+                        /*if ( $anterior->getEvent()  ==  'Saida'){
+                            echo  'teste2';
+                        }*/
+                        $anterior   =  $ponto;
+                        ?>
+
+
+
+
+
+
+                    <? } ?>
                     
                     </tbody>
                 </table>
