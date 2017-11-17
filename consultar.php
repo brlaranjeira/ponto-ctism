@@ -100,5 +100,6 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
 </html>

@@ -1,11 +1,18 @@
 $('#tb-registros').on('click','.btn-delete',function() {
+
+    var $btn = $(this);
     var cod = $(this).attr('cod');
-    if ( confirm('confirma a exclusão?') ) {
+
+    confirmModal('Confirma a exclusão deste registro?', function () {
         $.ajax('./ajax/delete.php', {
             method: 'post',
             data: {cod: cod},
             success: function ( response ) {
-                carregaTbConsulta();
+                btnCarregando( $btn );
+                carregaTbConsulta( function () {
+                    showMessage('[PONTO ELETRÔNICO]','Registro removido!')
+                });
+
             }, error: function ( response ) {
                 var responseText = JSON.parse(response.responseText);
                 switch (response.status) {
@@ -17,17 +24,18 @@ $('#tb-registros').on('click','.btn-delete',function() {
                         break;
                 }
             }
-        })
-    }
+        });
+    });
+
 });
 
 $(document).ready( function () {
+    showTdCarregando();
+    $('#tb-registros > tbody').empty();
     carregaTbConsulta();
 });
 
-function carregaTbConsulta() {
-    $('#td-carregando').removeClass('hidden');
-    $('#tb-registros > tbody').empty();
+function carregaTbConsulta( callbackSuccess , callbackError ) {
     var bolsista = document.getElementById('select-bolsista').value;
     var mes = document.getElementById('select-mes').value;
     var ano = document.getElementById('select-ano').value;
@@ -38,11 +46,29 @@ function carregaTbConsulta() {
             ano: ano,
             mes: mes
         }, success: function ( response ) {
+            hideTdCarregando();
+            $('#tb-registros > tbody').empty();
             $('#tb-registros > tbody').html(response);
-            $('#td-carregando').addClass('hidden');
-
+            if ( callbackSuccess !== undefined ) {
+                callbackSuccess();
+            }
         }, error: function ( response ) {
             alert('nao foi');
         }
     });
+}
+
+
+function btnCarregando( $btn ) {
+    var $span = $btn.find('span');
+    $btn.attr('disabled','');
+    $span.removeClass('glyphicon glyphicon-trash').text('.');
+    var fn = setInterval( function () {
+        var texto = $span.text();
+        if (texto.length < 3) {
+            $span.text(texto + '.');
+        } else {
+            $span.text('.')
+        }
+    },500 );
 }
