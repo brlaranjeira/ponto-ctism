@@ -61,7 +61,10 @@ function carregaTbConsulta( callbackSuccess , callbackError ) {
 
 function btnCarregando( $btn ) {
     var $span = $btn.find('span');
-    $btn.attr('disabled','');
+    $('.btn-delete').each( function () {
+        $(this).attr('disabled','');
+    } );
+    //$btn.attr('disabled','');
     $span.removeClass('glyphicon glyphicon-trash').text('.');
     var fn = setInterval( function () {
         var texto = $span.text();
