@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/consultar.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Ponto Bolsistas CTISM">
@@ -40,8 +41,8 @@
         <form method="get" action="">
             <div class="row">
                 <div class="col-xs-12 col-md-4 form-group">
-                    <label for="select-mes">Ano</label>
-                    <select name="ano" class="form-control">
+                    <label for="select-ano">Ano</label>
+                    <select id="select-ano" name="ano" class="form-control">
                         <? for ($i=date('Y');$i>=2013;$i--) {
                             $selStr = ($i == $anoSelecionado) ? 'selected' : '';
                             ?><option value="<?=$i?>" <?=$selStr?> ><?=$i?></option><?
@@ -51,7 +52,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4 form-group">
                     <label for="select-mes">M&ecirc;s</label>
-                    <select name="mes" class="form-control">
+                    <select id="select-mes" name="mes" class="form-control">
                         <? for ($i=0; $i<sizeof($meses);$i++) {
                             $vl = str_pad(strval($i+1),2,0,STR_PAD_LEFT);
                             $selStr = ($vl == $mesSelecionado) ? 'selected' : '';
@@ -61,7 +62,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4 form-group">
                     <label for="bolsista">Bolsista</label>
-                    <select name="bolsista" class="form-control">
+                    <select id="select-bolsista" name="bolsista" class="form-control">
                         <? foreach ($bolsistas as $bolsista) {
                             $selStr = $bolsista->getUid() == $bolsistaSelecionado->getUid() ? 'selected' : '';
                             ?><option value="<?=$bolsista->getUid()?>" <?=$selStr?>><?=$bolsista->getFullName()?></option><?
@@ -85,46 +86,11 @@
                         <th>Saída</th>
                         <th>Horas</th>
                     </tr>
+                    <tr>
+                        <th colspan="4" id="td-carregando" class="hidden" ></th>
+                    </tr>
                     </thead>
                     <tbody>
-                    <?
-                    require_once (__DIR__ . '/dao/Ponto.php');
-                    $dtIni = "$anoSelecionado-$mesSelecionado-01 00:00:00";
-                    $anoFim = ($mesSelecionado != '12') ? $anoSelecionado : intval($anoSelecionado)+1;
-                    $mesFim = ($mesSelecionado != '12') ? str_pad(intval($mesSelecionado)+1,2,0,STR_PAD_LEFT) : '01';
-                    $dtFim = "$anoFim-$mesFim-01 00:00:00";
-                    
-                    $pontos = Ponto::getByAttr(
-                            array('usuario','timestamp','timestamp'),
-                            array($bolsistaSelecionado->getUidNumber(),$dtIni,$dtFim),
-                            array('=','>=','<'),
-                            array(
-                                    'DATE(' . Ponto::getColumnName('timestamp') . ')',
-	                            Ponto::getColumnName('event') . '= \'' . Ponto::PONTO_ABONO . '\'',
-	                            'TIME('. Ponto::getColumnName('timestamp'). ')'));
-                    if (empty($pontos)) {
-                        echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
-                    }
-                    $anterior = null;
-                    foreach ( $pontos as $ponto ) {
-	                    $hora = $ponto->getTimestamp(Ponto::TS_HORARIO);
-	                    $btnDelete = '<button class="btn-delete btn btn-danger"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
-	                    $hora .= " $btnDelete";
-                        switch ($ponto->getEvent()) {
-                            case Ponto::PONTO_ENTRADA:
-                                $data = $ponto->getTimestamp(Ponto::TS_DATA);
-                                echo "<tr><td>$data</td><td>$hora</td>";
-                                break;
-                            case Ponto::PONTO_SAIDA:
-                                $diff = 'diff';
-                                echo "<td>$hora</td><td>$diff</td></tr>";
-                                break;
-                            default: //abono
-                                break;
-                        }
-                        $anterior = $ponto;
-                    } ?>
-                    
                     </tbody>
                 </table>
             </div>
