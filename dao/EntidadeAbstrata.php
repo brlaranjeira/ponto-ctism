@@ -268,6 +268,22 @@ abstract class EntidadeAbstrata {
         $this->id = $idInserido;
         return $ret;
     }
+    
+    public function delete() {
+    	$clazz = get_called_class();
+	    $cname = (isset($clazz::$idName)) ? $clazz::$idName : 'id';
+    	$sql = "DELETE FROM " . $clazz::$tbName . ' WHERE ' . $clazz::$idName . ' = ?';
+    	$conn = ConexaoBD::getConexao();
+    	$conn->beginTransaction();
+    	$stmt = $conn->prepare($sql);
+    	$execOk = $stmt->execute(array ($this->id));
+    	if ( $execOk ) {
+    		$conn->commit();
+	    } else {
+    		$conn->rollBack();
+	    }
+    	return $execOk;
+    }
 
     public function getId() {
         return $this->id;
@@ -283,7 +299,7 @@ abstract class EntidadeAbstrata {
     public static function getAll() {
         require_once (__DIR__ . "/../lib/ConexaoBD.php");
         $clazz = get_called_class();
-        $sql = 'SELECT * from ' . $clazz::$tbName;
+        $sql = 'SELECT * FROM ' . $clazz::$tbName;
         $statement = ConexaoBD::getConexao()->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchAll();
@@ -298,33 +314,46 @@ abstract class EntidadeAbstrata {
         $ret = self::getByAttr('id' , $id );
         return $ret[0];
     }
-
-
+	
+	
+	/**
+	 * @param $attrs
+	 * @param $values
+	 * @param string $operators
+	 * @param string $orderBy
+	 * @param string $orderType
+	 * @param null $limit
+	 * @return Ponto[]
+	 */
     public static function getByAttr($attrs , $values, $operators = '=', $orderBy = '', $orderType='ASC', $limit=null ) {
         require_once (__DIR__ . "/../lib/ConexaoBD.php");
         $operators = is_array($operators) ? $operators : array($operators);
         $clazz = get_called_class();
-        $sql = 'SELECT * from ' . $clazz::$tbName;
+        $sql = 'SELECT * FROM ' . $clazz::$tbName;
         $attrs = is_array($attrs) ? $attrs : array($attrs);
         $values = is_array($values) ? $values : array($values);
-        $orderBy = is_array($orderBy) ? $orderBy : array ($orderBy);
-	    $orderType = is_array($orderType) ? $orderType : array ($orderType);
+        
+        
         $len = min(sizeof($attrs),sizeof($values));
         for ( $i = 0; $i < $len; $i ++ ) {
-            $colName = ($attrs[$i] != 'id') ? ($clazz::$dicionario[$attrs[$i]]) : ( (isset($clazz::$idName)) ? $clazz::$idName : 'id');
-            $op = isset($operators[$i]) ? $operators[$i] : '=';
-            $op = (isset($operators) && isset($operators[$i])) ? $operators[$i] : '=';
-            $sql .= $i != 0 ? ' AND ' : ' WHERE ';
-            $sql .= $colName . ' ' . $op . ' ? ';
+	        $colName = ($attrs[$i] != 'id') ? ($clazz::$dicionario[$attrs[$i]]) : ( (isset($clazz::$idName)) ? $clazz::$idName : 'id');
+	        $op = isset($operators[$i]) ? :$operators[$i] : '=';
+	        $op = (isset($operators) && isset($operators[$i])) ? $operators[$i] : '=';
+	        $sql .= $i != 0 ? ' AND ' : ' WHERE ';
+	        $sql .= $colName . ' ' . $op . ' ? ';
         }
-        for ($i=0; $i< sizeof($orderBy); $i++ ) {
-        	$sql .= ($i == 0) ? ' ORDER BY ' : ' , ';
-        	$colName = $clazz::getColumnName($orderBy[$i]);
-        	$sql .= (isset($colName)) ? $colName : $orderBy[$i];
-        	$sql .= (isset($orderType[$i])) ? ' ' . $orderType[$i] . ' ' : '';
-        	
-        	
+        
+	    if (!empty($orderType) && !empty($orderBy)) {
+		    $orderBy = is_array($orderBy) ? $orderBy : array ($orderBy);
+		    $orderType = is_array($orderType) ? $orderType : array ($orderType);
+	        for ($i=0; $i< sizeof($orderBy); $i++ ) {
+		        $sql .= ($i == 0) ? ' ORDER BY ' : ' , ';
+		        $colName = $clazz::getColumnName($orderBy[$i]);
+		        $sql .= (isset($colName)) ? $colName : $orderBy[$i];
+		        $sql .= (isset($orderType[$i])) ? ' ' . $orderType[$i] . ' ' : '';
+	        }
         }
+        
         if (isset($limit)) {
         	$sql .= " LIMIT $limit";
         }
