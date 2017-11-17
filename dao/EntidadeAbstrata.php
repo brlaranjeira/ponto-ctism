@@ -546,7 +546,3 @@ abstract class EntidadeAbstrata {
     }
 
 }
-
-// /sbin/iptables -A FORWARD -p tcp --dport 881 -j ACCEPT
-// /sbin/iptables -t nat -A PREROUTING ! -s 172.17.8.27 -p tcp -d $extaddr --dport 881 -j DNAT --to-destination 172.17.8.8:80
-// /sbin/iptables -t nat -A POSTROUTING -P tcp -s 172.17.8.8 --sport 80 -j SNAT --to $extaddr:881
