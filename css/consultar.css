@@ -1,0 +1,8 @@
+#td-carregando {
+    text-align:center;
+    font-weight: lighter;
+    background-position-x: center;
+    background-image: url('../img/loading.gif');
+    background-repeat: no-repeat;
+    height: 150px;
+}
