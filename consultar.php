@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/consultar.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Ponto Bolsistas CTISM">
@@ -40,8 +41,8 @@
         <form method="get" action="">
             <div class="row">
                 <div class="col-xs-12 col-md-4 form-group">
-                    <label for="select-mes">Ano</label>
-                    <select name="ano" class="form-control">
+                    <label for="select-ano">Ano</label>
+                    <select id="select-ano" name="ano" class="form-control">
                         <? for ($i=date('Y');$i>=2013;$i--) {
                             $selStr = ($i == $anoSelecionado) ? 'selected' : '';
                             ?><option value="<?=$i?>" <?=$selStr?> ><?=$i?></option><?
@@ -51,7 +52,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4 form-group">
                     <label for="select-mes">M&ecirc;s</label>
-                    <select name="mes" class="form-control">
+                    <select id="select-mes" name="mes" class="form-control">
                         <? for ($i=0; $i<sizeof($meses);$i++) {
                             $vl = str_pad(strval($i+1),2,0,STR_PAD_LEFT);
                             $selStr = ($vl == $mesSelecionado) ? 'selected' : '';
@@ -61,7 +62,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4 form-group">
                     <label for="bolsista">Bolsista</label>
-                    <select name="bolsista" class="form-control">
+                    <select id="select-bolsista" name="bolsista" class="form-control">
                         <? foreach ($bolsistas as $bolsista) {
                             $selStr = $bolsista->getUid() == $bolsistaSelecionado->getUid() ? 'selected' : '';
                             ?><option value="<?=$bolsista->getUid()?>" <?=$selStr?>><?=$bolsista->getFullName()?></option><?
@@ -77,7 +78,7 @@
         </form>
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-striped">
+                <table id="tb-registros" class="table table-striped">
                     <thead>
                     <tr>
                         <th>Dia</th>
@@ -85,100 +86,11 @@
                         <th>Saída</th>
                         <th>Horas</th>
                     </tr>
+                    <tr>
+                        <th colspan="4" id="td-carregando" class="hidden" ></th>
+                    </tr>
                     </thead>
                     <tbody>
-                    <?
-                    require_once (__DIR__ . '/dao/Ponto.php');
-                    $dtIni = "$anoSelecionado-$mesSelecionado-01 00:00:00";
-                    $anoFim = ($mesSelecionado != '12') ? $anoSelecionado : intval($anoSelecionado)+1;
-                    $mesFim = ($mesSelecionado != '12') ? str_pad(intval($mesSelecionado)+1,2,0,STR_PAD_LEFT) : '01';
-                    $dtFim = "$anoFim-$mesFim-01 00:00:00";
-                    
-                    $pontos = Ponto::getByAttr(
-                            array('usuario','timestamp','timestamp'),
-                            array($bolsistaSelecionado->getUidNumber(),$dtIni,$dtFim),
-                            array('=','>=','<'),
-                            array(
-                                    'DATE(' . Ponto::getColumnName('timestamp') . ')',
-	                            Ponto::getColumnName('event') . '= \'' . Ponto::PONTO_ABONO . '\'',
-	                            'TIME('. Ponto::getColumnName('timestamp'). ')'));
-                    if (empty($pontos)) {
-                        echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
-                    }
-                   $anterior    =   null;
-                    echo '<tr>';
-                    foreach ( $pontos as $ponto ) {
-
-                        if ($ponto->getEvent() == 'Entrada') {
-
-                            if(  (isset($anterior) && $anterior->getEvent() == 'Entrada'))  /*||  ( isset($anterior) && $ponto->getTimestamp(Ponto::TS_DATA)   != $anterior->getTimestamp(Ponto::TS_DATA)))*/{
-                                echo '<td>';
-                                echo 'Justifique sua saida';
-                                echo '</td>';
-                                echo '</tr>';
-                            }
-                            echo '<td>';
-                            echo $ponto->getTimestamp(Ponto::TS_DATA);
-                            echo '</td>';
-                            echo '<td>';
-                            echo   $ponto->getTimestamp(Ponto::TS_HORARIO);
-                            echo '</td>';
-
-                        }
-
-                       elseif  ($ponto->getEvent() == 'Saida') {
-                           if (isset($anterior) && $anterior->getEvent() == 'Saida') {
-                               echo '<td>';
-                               echo $ponto->getTimestamp(Ponto::TS_DATA);
-                               echo '</td>';
-                               echo '<td>';
-                               echo 'Justifique sua Entrada';
-                               echo '</td>';
-
-                           } elseif (isset($anterior) && $anterior->getEvent() == 'Entrada' && $ponto->getTimestamp(Ponto::TS_DATA) != $anterior->getTimestamp(Ponto::TS_DATA)) {
-                               echo '<td>';
-                               echo 'Justifique sua Saida';
-                               echo '</td>';
-                               //echo '<td>';
-                               //echo $ponto->getTimestamp(Ponto::TS_DATA);
-                              // echo '</td>';
-                               echo '</tr>';
-                               echo '<td>';
-                               echo $ponto->getTimestamp(Ponto::TS_DATA);
-                               echo '</td>';
-                               echo '<td>';
-                               echo 'Justifique sua Entrada';
-                               echo '</td>';
-                        }
-                            echo '<td>';
-                            echo $ponto->getTimestamp(Ponto::TS_HORARIO);
-                            echo '</td>';
-                            echo '</tr>';
-                            if( $ponto->getEvent() == 'Saida'){
-                                $anterior = $ponto;
-                                //  echo 'teste';
-                            }
-                        }
-                       /* if( $anterior->getEvent() == 'Entrada'  &&  $ponto->getEvent()  == 'Entrada'){
-                            echo '<td>';
-                            echo 'Justifique sua saida';
-                            echo '</td>';
-                            echo '</tr>';
-                        }*/
-
-                        /*if ( $anterior->getEvent()  ==  'Saida'){
-                            echo  'teste2';
-                        }*/
-                        $anterior   =  $ponto;
-                        ?>
-
-
-
-
-
-
-                    <? } ?>
-                    
                     </tbody>
                 </table>
             </div>
@@ -188,4 +100,5 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
 </html>
