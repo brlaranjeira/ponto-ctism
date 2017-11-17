@@ -60,13 +60,21 @@ if (isset($_POST) && ! empty($_POST)) {
             <div class="col-md-6 col-xs-12 form-group">
                 <label for="registro-evt">Evento</label>
                 <select name="registro-evt" id="registro-evt" class="form-control">
-                    <option value="<?=Ponto::PONTO_ENTRADA?>">Entrada</option>
-                    <option value="<?=Ponto::PONTO_SAIDA?>">Sa&iacute;da</option>
+                    <option <?=isset($_GET['evt']) && $_GET['evt'] == Ponto::PONTO_ENTRADA ? 'selected' : '' ?> value="<?=Ponto::PONTO_ENTRADA?>">Entrada</option>
+                    <option <?=isset($_GET['evt']) && $_GET['evt'] == Ponto::PONTO_SAIDA ? 'selected' : '' ?> value="<?=Ponto::PONTO_SAIDA?>">Sa&iacute;da</option>
                 </select>
             </div>
             <div class="col-md-6 col-xs-12 form-group">
                 <label for="registro-dthr">Data e Hora</label>
-                <input name="registro-dthr" id="registro-dthr" type="text" class="form-control input-data" maxlength="16" placeholder="DD/MM/AAAA hh:mm">
+                <?
+                $dtVal = '';
+                if (isset($_GET['dt'])) {
+                    $dtVal = substr($_GET['dt'],0,2) . '/' .
+	                    substr($_GET['dt'],2,2) . '/' .
+	                    substr($_GET['dt'],4,4);
+                }
+                ?>
+                <input autofocus onfocus="var temp_value=this.value; this.value=''; this.value=temp_value" name="registro-dthr" id="registro-dthr" type="text" class="form-control input-data" maxlength="16" placeholder="DD/MM/AAAA hh:mm" value="<?=$dtVal?>">
             </div>
         </div>
         <div class="row">
