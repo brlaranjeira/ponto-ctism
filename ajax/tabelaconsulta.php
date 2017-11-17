@@ -38,7 +38,7 @@ $totalAbono = 0;
 foreach ( $pontos as $ponto ) {
 	
 	$hora = $ponto->getTimestamp( Ponto::TS_HORARIO );
-	$btnDelete = '<button class="btn-delete btn btn-danger btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+	$btnDelete = '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 	$hora .= " $btnDelete";
 	$data = $ponto->getTimestamp( Ponto::TS_DATA );
 	
