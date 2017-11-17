@@ -337,7 +337,7 @@ abstract class EntidadeAbstrata {
         $len = min(sizeof($attrs),sizeof($values));
         for ( $i = 0; $i < $len; $i ++ ) {
 	        $colName = ($attrs[$i] != 'id') ? ($clazz::$dicionario[$attrs[$i]]) : ( (isset($clazz::$idName)) ? $clazz::$idName : 'id');
-	        $op = isset($operators[$i]) ? :$operators[$i] : '=';
+	        $op = isset($operators[$i]) ? $operators[$i] : '=';
 	        $op = (isset($operators) && isset($operators[$i])) ? $operators[$i] : '=';
 	        $sql .= $i != 0 ? ' AND ' : ' WHERE ';
 	        $sql .= $colName . ' ' . $op . ' ? ';
