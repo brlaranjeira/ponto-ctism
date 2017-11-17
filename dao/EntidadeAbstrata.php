@@ -272,7 +272,7 @@ abstract class EntidadeAbstrata {
     public function delete() {
     	$clazz = get_called_class();
 	    $cname = (isset($clazz::$idName)) ? $clazz::$idName : 'id';
-    	$sql = "DELETE FROM " . $clazz::$tbName . ' WHERE ' . $clazz::$idName . ' = ?';
+    	$sql = "DELETE FROM " . $clazz::$tbName . ' WHERE ' . $cname . ' = ?';
     	$conn = ConexaoBD::getConexao();
     	$conn->beginTransaction();
     	$stmt = $conn->prepare($sql);
