@@ -76,6 +76,13 @@ foreach ( $pontos as $ponto ) {
 		}
 		echo '</tr>';
 		$anterior = $ponto;
+	} elseif ($ponto->getEvent() == Ponto::PONTO_ABONO) {
+		if (isset($anterior) && $anterior->getEvent() == Ponto::PONTO_ENTRADA) {
+			echo '<td>' . linkj(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td>';
+			echo '<td>Impossível calcular</td></tr>';
+		}
+		echo '<tr><td>' . $data .'</td><td colspan="2">' . 'ABONO' . '</td>';
+		echo '<td>' . $hora . '</td></tr>';
 	}
 	$anterior = $ponto->getEvent() == Ponto::PONTO_ABONO ? $anterior : $ponto;
 } ?>
