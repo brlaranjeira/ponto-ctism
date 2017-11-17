@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: brlaranjeira
- * Date: 10/28/17
- * Time: 1:03 PM
+ * Date: 8/31/17
+ * Time: 10:40 AM
  */
 ?>
 
@@ -20,11 +20,32 @@
     <link rel="icon" href="img/CTISM.ico">
     <title>Ponto Bolsistas</title>
 </head>
+<?
+require_once (__DIR__ . '/dao/Ponto.php');
+require_once (__DIR__ . '/dao/Usuario.php');
+ include './fragment/header.php';
+?>
 <body>
 
-<?
-include "./fragment/header.php";
 
-?>
+<div class="row">
+    <div class="col-md-3 col-xs-6 form-group">
+        <label for="registro-evt">Bolsista</label>
+        <?
+        $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+        $bolsistaSelecionado = isset($_GET['bolsista']) ? new Usuario($_GET['bolsista']) : $bolsistas[0];
+        ?>
+        <br/>
+        <div class="col-md-3 col-xs-6 form-group">
+            <?
+            foreach ($bolsistas as $bolsista) {
+                $bolsista->getUid()?> <?=$bolsista->getFullName();
 
-DEFERIR
+                }?>
+
+        </div>
+    </div>
+</div>
+
+
+
