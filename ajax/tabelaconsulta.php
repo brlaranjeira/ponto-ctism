@@ -19,6 +19,18 @@ function linkJustificativa( $evt , $dt='' ) {
 	return "<a href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
 }
 
+function buildTooltip ( $ponto ) {
+	$just = $ponto->getJust();
+	if ( isset($just) ) {
+		return "<a href=\"#\" data-toggle=\"tooltip\" title=\"$just\">
+					<small>
+						<span class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span>
+					</small>
+				</a>";
+	}
+	return '';
+}
+
 $dtIni= "$ano-$mes-01 00:00:00";
 $anoFim = ($mes != '12') ? $ano : intval($ano)+1;
 $mesFim = ($mes != '12') ? str_pad(intval($mes)+1,2,0,STR_PAD_LEFT) : '01';
@@ -48,9 +60,14 @@ $totalAbono = 0;
 foreach ( $pontos as $ponto ) {
 	
 	$hora = $ponto->getTimestamp( Ponto::TS_HORARIO );
+	$tooltip = buildTooltip($ponto);
 	$btnDelete = '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
-	$hora .= " $btnDelete";
+	$hora .= " $btnDelete ";
+	if ($ponto->getEvent() != Ponto::PONTO_ABONO ) {
+		$hora .= " $tooltip";
+	}
 	$data = $ponto->getTimestamp( Ponto::TS_DATA );
+	
 	
 	if ( $ponto->getEvent() == Ponto::PONTO_ENTRADA ) {
 		if ( ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) )   {
@@ -84,7 +101,7 @@ foreach ( $pontos as $ponto ) {
 			echo '<td>' . linkJustificativa( Ponto::PONTO_SAIDA , $anterior->getTimestamp() ) . '</td>';
 			echo '<td class="td-right">Impossível calcular</td></tr>';
 		}
-		echo '<tr><td>' . $data . '</td><td colspan="2">' . 'ABONO' . '</td>';
+		echo '<tr><td>' . $data . '</td><td colspan="2">Abono de horas' . $tooltip . '</td>';
 		echo '<td class="td-right">' . $hora . '</td></tr>';
 		$horaParts = explode( ':' , $hora );
 		$totalAbono += $horaParts[ 0 ] * 3600 + $horaParts[ 1 ] * 60 + $horaParts[ 2 ];
