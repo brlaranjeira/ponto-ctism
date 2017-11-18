@@ -49,6 +49,7 @@ function carregaTbConsulta( callbackSuccess , callbackError ) {
             hideTdCarregando();
             $('#tb-registros > tbody').empty();
             $('#tb-registros > tbody').html(response);
+            $('[data-toggle="tooltip"]').tooltip();
             if ( callbackSuccess !== undefined ) {
                 callbackSuccess();
             }

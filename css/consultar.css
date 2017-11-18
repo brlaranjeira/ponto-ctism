@@ -28,3 +28,7 @@
 #tb-registros :not(.td-right) {
     /*text-align: center;*/
 }
+
+#tb-registros span.glyphicon.glyphicon-info-sign {
+    vertical-align: top;
+}
