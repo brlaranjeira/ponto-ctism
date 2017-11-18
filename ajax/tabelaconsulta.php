@@ -36,7 +36,7 @@ $anterior = null;
 $totalTrab = 0;
 $totalAbono = 0;
 
-function linkj( $evt , $dt='' ) {
+function linkJustificativa( $evt , $dt='' ) {
 	$dt = explode('-',explode(' ',$dt)[0]);
 	$dt = $dt[2] . $dt[1] . $dt[0];
 	return "<a href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
@@ -51,17 +51,17 @@ foreach ( $pontos as $ponto ) {
 	
 	if ( $ponto->getEvent() == Ponto::PONTO_ENTRADA ) {
 		if ( ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) )   {
-			echo '<td>' . linkj(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td>Impossível calcular</td></tr>';
+			echo '<td>' . linkJustificativa(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td>Impossível calcular</td></tr>';
 		}
 		echo "<tr><td>$data</td><td>$hora</td>";
 	} elseif ( $ponto->getEvent() == Ponto::PONTO_SAIDA ) {
 		$pendencia = false;
 		if ( !isset( $anterior ) || $anterior->getEvent() == Ponto::PONTO_SAIDA ) {
-			echo '<tr><td>'.$data.'</td><td>' . linkj(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) . '</td>';
+			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) . '</td>';
 			$pendencia = true;
 		} elseif ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA && $ponto->getTimestamp( Ponto::TS_DATA ) != $anterior->getTimestamp( Ponto::TS_DATA ) ) {
-			echo '<td>' . linkj(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td>Impossível calcular</td></tr>';
-			echo '<tr><td>'.$data.'</td><td>' . linkj(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) .'</td>';
+			echo '<td>' . linkJustificativa(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td>Impossível calcular</td></tr>';
+			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) .'</td>';
 			$pendencia = true;
 		}
 		echo "<td>$hora</td>";
@@ -78,7 +78,7 @@ foreach ( $pontos as $ponto ) {
 		$anterior = $ponto;
 	} elseif ($ponto->getEvent() == Ponto::PONTO_ABONO) {
 		if (isset($anterior) && $anterior->getEvent() == Ponto::PONTO_ENTRADA) {
-			echo '<td>' . linkj(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td>';
+			echo '<td>' . linkJustificativa(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td>';
 			echo '<td>Impossível calcular</td></tr>';
 		}
 		echo '<tr><td>' . $data .'</td><td colspan="2">' . 'ABONO' . '</td>';
