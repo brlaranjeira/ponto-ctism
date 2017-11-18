@@ -2,11 +2,29 @@
     text-align:center;
     font-weight: lighter;
     background-position-x: center;
+    background-position-y: center;
     background-image: url('../img/loading.gif');
     background-repeat: no-repeat;
-    height: 150px;
+    height: 70px;
 }
 
 .btn-apagar {
     width: 40px;
+}
+
+#tb-registros > thead {
+    border-bottom: 3px solid black;
+}
+
+#tb-registros > tbody > tr.bottom {
+    border-top: 3px solid black;
+}
+
+#tb-registros .td-right {
+    text-align: right;
+    font-weight: bold;
+}
+
+#tb-registros :not(.td-right) {
+    /*text-align: center;*/
 }

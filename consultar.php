@@ -84,7 +84,7 @@
                         <th>Dia</th>
                         <th>Entrada</th>
                         <th>Saída</th>
-                        <th>Horas</th>
+                        <th class="td-right">Horas</th>
                     </tr>
                     <tr>
                         <th colspan="4" id="td-carregando" class="hidden" ></th>
