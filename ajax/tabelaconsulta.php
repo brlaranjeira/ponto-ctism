@@ -30,6 +30,10 @@ function linkJustificativa( $bolsista , $evt , $dt='' ) {
 
 function buildTooltip ( $ponto ) {
 	$just = $ponto->getJust();
+	if ($ponto->getDeferido() == 0) {
+		$just = "$just
+Aguardando deferimento";
+	}
 	if ( isset($just) ) {
 		return "<a data-toggle=\"tooltip\" title=\"$just\">
 					<small>
@@ -82,14 +86,18 @@ $totalTrab = 0;
 $totalAbono = 0;
 foreach ( $pontos as $ponto ) {
 	
-	$hora = $ponto->getTimestamp( Ponto::TS_HORARIO );
+	if ($deferido = $ponto->getDeferido() == 1) {
+		$hora = '<span>' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
+	} else {
+		$hora = '<span class="nao-deferido">' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
+	}
 	$tooltip = buildTooltip($ponto);
-//	$btnDelete = ;
 	$btnDelete = buildTrashBtn($usr, $ponto);
 	$hora .= " $btnDelete ";
 	if ($ponto->getEvent() != Ponto::PONTO_ABONO ) {
 		$hora .= " $tooltip";
 	}
+	
 	$data = $ponto->getTimestamp( Ponto::TS_DATA );
 	
 	
