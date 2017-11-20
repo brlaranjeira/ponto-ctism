@@ -6,7 +6,6 @@
  * Time: 2:14 PM
  */
 
-session_start();
-session_destroy();
-session_commit();
+require_once (__DIR__ . '/dao/Usuario.php');
+Usuario::destroySession();
 header('Location: ./login.php');
