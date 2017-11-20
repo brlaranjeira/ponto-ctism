@@ -12,6 +12,7 @@ class Usuario implements Serializable {
 	const GRUPO_PROFESSORES = '10001';
 	const GRUPO_FUNCIONARIOS = '10002';
 	const GRUPO_BOLSISTAS = '10003';
+	const GRUPO_SSI = '10004';
 	
 	private static $mruQueueSize = 20;
 	/**
@@ -90,7 +91,6 @@ class Usuario implements Serializable {
 			array_pop(self::$mruQueueUid);
 			array_pop(self::$mruQueueUidNumber);
 		}
-		$a = 2;
 	}
 	
 	/**

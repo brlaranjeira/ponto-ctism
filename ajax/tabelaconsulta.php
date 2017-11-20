@@ -40,6 +40,15 @@ function buildTooltip ( $ponto ) {
 	return '';
 }
 
+
+function buildTrashBtn ( $usr,  $ponto ) {
+	if ($ponto->getUsuario()->getUid() == $usr->getUid()) {
+		return '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+	} else {
+		return '';
+	}
+}
+
 $dtIni= "$ano-$mes-01 00:00:00";
 $anoFim = ($mes != '12') ? $ano : intval($ano)+1;
 $mesFim = ($mes != '12') ? str_pad(intval($mes)+1,2,0,STR_PAD_LEFT) : '01';
@@ -59,7 +68,12 @@ if (empty($pontos)) {
 	echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
 }
 
-
+if (!$usr->hasGroup(array(Usuario::GRUPO_PROFESSORES,Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_SSI))) {
+	if ($usr->getUidNumber() != $bolsista) {
+		http_response_code(400);
+		die();
+	}
+}
 
 
 
@@ -70,7 +84,8 @@ foreach ( $pontos as $ponto ) {
 	
 	$hora = $ponto->getTimestamp( Ponto::TS_HORARIO );
 	$tooltip = buildTooltip($ponto);
-	$btnDelete = '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+//	$btnDelete = ;
+	$btnDelete = buildTrashBtn($usr, $ponto);
 	$hora .= " $btnDelete ";
 	if ($ponto->getEvent() != Ponto::PONTO_ABONO ) {
 		$hora .= " $tooltip";
