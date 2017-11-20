@@ -25,11 +25,26 @@ if (!isset($usuario)) {
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="consultar.php">Consultar</a></li>
-				<li class="active"><a href="registrar.php">Registrar</a></li>
-				<li class="active"><a href="justificar.php">Justificar</a></li>
-				<li class="active"><a href="abonar.php">Abonar horas</a></li>
-				<li class="active"><a href="deferir.php">Deferir registros</a></li>
+                <?
+                    $paginas = [
+                            'consultar' => 'Consultar',
+                            'registrar' => 'Registrar',
+                            'justificar' => 'Justificar',
+                            'abonar' => 'Abonar horas',
+                            'deferir' => 'Deferir registros',
+                    ];
+                    foreach ($paginas as $k => $v) {
+                        $clActive = explode('.',basename($_SERVER['PHP_SELF']))[0] == $k ?
+                            'class="active"' : '';
+                        ?><li <?=$clActive?>><a href="<?=$k?>.php"><?=$v?></a> </li><?
+                    }
+                    
+                ?>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><?=$usuario->getFullName()?></a></li>
+                <li><a>|</a></li>
+				<li><a href="logout.php">Sair</a></li>
 			</ul>
 		</div>
 	</div>
