@@ -8,6 +8,7 @@
 
 require_once (__DIR__.'/../dao/Ponto.php');
 require_once (__DIR__.'/../dao/Usuario.php');
+require_once (__DIR__ . '/../lib/Utils.php');
 $bolsista = $_REQUEST['bolsista'];
 $bolsista = (new Usuario($bolsista))->getUidnumber();
 $ano = $_REQUEST['ano'];
@@ -88,7 +89,7 @@ foreach ( $pontos as $ponto ) {
 		if ($pendencia) {
 			echo '<td class="td-right">Impossível calcular</td>';
 		} else {
-			require_once (__DIR__ . '/../lib/Utils.php');
+			
 			$diff = Utils::timeDiff($ponto->getTimestamp(Ponto::TS_HORARIO),$anterior->getTimestamp(Ponto::TS_HORARIO));
 			$totalTrab += $diff;
 			$tempo = Utils::secondsToStrtime($diff);

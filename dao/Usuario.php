@@ -13,6 +13,17 @@ class Usuario implements Serializable {
 	const GRUPO_FUNCIONARIOS = '10002';
 	const GRUPO_BOLSISTAS = '10003';
 	
+	private static $mruQueueSize = 20;
+	/**
+	 * @var Usuario[]
+	 */
+	private static $mruQueueUid = [];
+	/**
+	 * @var Usuario[]
+	 */
+	private static $mruQueueUidNumber = [];
+	
+	
 	
 	/**
 	 * @var string id do usuario
@@ -37,6 +48,51 @@ class Usuario implements Serializable {
 	private $email;
 
 	
+	private function seekMRUQueue ( $uid ) {
+		if (array_key_exists($uid,self::$mruQueueUid)) {
+			return self::$mruQueueUid[$uid];
+		}
+		if (array_key_exists($uid,self::$mruQueueUidNumber )) {
+			return self::$mruQueueUidNumber[$uid];
+		}
+		return false;
+	}
+	
+	private static function seekMRUUid ($uid) {
+//		return false;
+		if (!array_key_exists($uid,self::$mruQueueUid)) {
+			return false;
+		}
+		return self::$mruQueueUid[$uid];
+	}
+	
+	private static function seekMRUUidNumber ($uidNumber) {
+//		return false;
+		if (!array_key_exists($uidNumber,self::$mruQueueUidNumber)) {
+			return false;
+		}
+		return self::$mruQueueUidNumber[$uidNumber];
+	}
+	
+	/**
+	 * @param $elm Usuario
+	 */
+	private static function updateQueues($elm) {
+		if ( array_key_exists($elm->uid,self::$mruQueueUid) ) {
+			unset(self::$mruQueueUid[$elm->uid]);
+			unset(self::$mruQueueUidNumber[$elm->uidNumber]);
+		}
+		$arrUid = [$elm-> uid => $elm];
+		$arrUidNumber = [$elm-> uidNumber => $elm];
+		self::$mruQueueUid = array_merge($arrUid,self::$mruQueueUid);
+		self::$mruQueueUidNumber = array_merge($arrUidNumber,self::$mruQueueUidNumber);
+		if (sizeof(self::$mruQueueUid) > self::$mruQueueSize) {
+			array_pop(self::$mruQueueUid);
+			array_pop(self::$mruQueueUidNumber);
+		}
+		$a = 2;
+	}
+	
 	/**
 	 * Usuario constructor.
 	 * @param string $uid
@@ -45,45 +101,66 @@ class Usuario implements Serializable {
 	 * @param string $uidNumber
 	 */
 	public function __construct($uid, $loadGrupos = false, $fullName = null, $uidNumber = null, $email=null ) {
+		
 		$this->uid = $uid;
-		$this->fullName = $fullName;
-        $this->uidNumber = $uidNumber;
-        $this->email = $email;
-        $attrs = array();
-        if (!isset($fullName)) {
-            $attrs[] = 'sn';
-            $attrs[] = 'givenname';
-        }
-        if (!isset($uidNumber)) {
-            $attrs[] = 'uidnumber';
-        }
-        if (!isset($email)) {
-            $attrs[] = 'mail';
-        }
-        if (!empty($attrs)) {
-            require_once(__DIR__."/../lib/LDAP/ldap.php");
-            $ldap = new ldap();
-            $parts = $ldap->getXbyY($attrs,'uid',$this->uid);
-            if (!isset($fullName)) {
-                $this->fullName = $parts['givenname'] . ' ' . $parts['sn'];
-            }
-            if (!isset($uidNumber)) {
-                $this->uidNumber = $parts['uidnumber'];
-            }
-            if (!isset($email)) {
-                $this->email= $parts['mail'];
-            }
-        }
-		$loadGrupos and $this->loadGrupos();
+		
+		$fromQueue = self::seekMRUUid($uid);
+		if ($fromQueue) {
+			
+			$this->fullName = $fromQueue->fullName;
+			$this->uidNumber = $fromQueue->uidNumber;
+			$this->email = $fromQueue->email;
+			$this->grupos = $fromQueue->grupos;
+			
+		} else {
+			
+			$this->fullName = $fullName;
+			$this->uidNumber = $uidNumber;
+			$this->email = $email;
+			$attrs = array();
+			if (!isset($fullName)) {
+				$attrs[] = 'sn';
+				$attrs[] = 'givenname';
+			}
+			if (!isset($uidNumber)) {
+				$attrs[] = 'uidnumber';
+			}
+			if (!isset($email)) {
+				$attrs[] = 'mail';
+			}
+			if (!empty($attrs)) {
+				require_once(__DIR__."/../lib/LDAP/ldap.php");
+				$ldap = new ldap();
+				$parts = $ldap->getXbyY($attrs,'uid',$this->uid);
+				if (!isset($fullName)) {
+					$this->fullName = $parts['givenname'] . ' ' . $parts['sn'];
+				}
+				if (!isset($uidNumber)) {
+					$this->uidNumber = $parts['uidnumber'];
+				}
+				if (!isset($email)) {
+					$this->email= $parts['mail'];
+				}
+			}
+			$loadGrupos and $this->loadGrupos();
+			
+		}
+		self::updateQueues($this);
 	}
 	
 	public static function getByUidNumber ( $uidNumber ) {
+		$fromQueue = self::seekMRUUidNumber($uidNumber);
+		if ($fromQueue) {
+			self::updateQueues($fromQueue);
+			return $fromQueue;
+		}
 		require_once(__DIR__."/../lib/LDAP/ldap.php");
 		$ldap = new ldap();
 		$parts = $ldap->getXbyY(['uid','sn','givenname','mail'],'uidnumber',$uidNumber);
-		return new Usuario($parts['uid'],true,$parts['givenname'] . ' ' . $parts['sn'], $uidNumber, $parts['mail']);
+		$ret = new Usuario($parts['uid'],true,$parts['givenname'] . ' ' . $parts['sn'], $uidNumber, $parts['mail']);
+		self::updateQueues($ret);
+		return $ret;
 	}
-	
 	
 	
 	/**
