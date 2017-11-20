@@ -322,7 +322,7 @@ abstract class EntidadeAbstrata {
 	 * @param string $operators
 	 * @param string $orderBy
 	 * @param string $orderType
-	 * @param null $limit
+	 * @param int $limit
 	 * @return Ponto[]
 	 */
     public static function getByAttr($attrs , $values, $operators = '=', $orderBy = '', $orderType='ASC', $limit=null ) {
