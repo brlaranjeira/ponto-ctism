@@ -367,6 +367,25 @@ class Usuario implements Serializable {
 			? Usuario::unserialize($_SESSION['ctism_user'])
 			: null;
 	}
+	
+	public function getPaginasPermitidas() {
+		require_once ( __DIR__ . '/../lib/ConfigClass.php' );
+		$usrGroups = $this->getGrupos();
+		$paginas = ConfigClass::paginas;
+		$paginas = array_filter($paginas , function($pag) use ($usrGroups) {
+			if ($pag['permissoes'] == '*') {
+				return true;
+			}
+			$intersect = array_intersect($usrGroups,$pag['permissoes']);
+			return !empty($intersect);
+		});
+		return $paginas;
+	}
+	
+	public function verificaPermissao($pag) {
+		$paginas = $this->getPaginasPermitidas();
+		return array_key_exists($pag,$paginas);
+	}
 
 	
 }
