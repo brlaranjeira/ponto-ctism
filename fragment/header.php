@@ -10,7 +10,14 @@ require_once (__DIR__ . '/../dao/Usuario.php');
 $usuario = Usuario::restoreFromSession();
 if (!isset($usuario)) {
     header('Location: ' . './login.php');
+    die();
 }
+$current = explode('.',basename($_SERVER['PHP_SELF']))[0];
+if (!$usuario->verificaPermissao($current)) {
+	header('Location: ' . './main.php');
+	die();
+}
+$paginas = $usuario->getPaginasPermitidas();
 ?>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="container">
@@ -26,17 +33,19 @@ if (!isset($usuario)) {
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
                 <?
-                    $paginas = [
-                            'consultar' => 'Consultar',
-                            'registrar' => 'Registrar',
-                            'justificar' => 'Justificar',
-                            'abonar' => 'Abonar horas',
-                            'deferir' => 'Deferir registros',
-                    ];
+//                    require_once ( __DIR__ . '/../lib/ConfigClass.php' );
+//                    $usrGroups = $usuario->getGrupos();
+//                    $paginas = ConfigClass::paginas;
+//                    $paginas = array_filter($paginas , function($pag) use ($usrGroups) {
+//                        if ($pag['permissoes'] == '*') {
+//                            return true;
+//                        }
+//                        $intersect = array_intersect($usrGroups,$pag['permissoes']);
+//                        return !empty($intersect);
+//                    });
                     foreach ($paginas as $k => $v) {
-                        $clActive = explode('.',basename($_SERVER['PHP_SELF']))[0] == $k ?
-                            'class="active"' : '';
-                        ?><li <?=$clActive?>><a href="<?=$k?>.php"><?=$v?></a> </li><?
+                        $clActive = $current == $k ? 'class="active"' : '';
+                        ?><li <?=$clActive?>><a href="<?=$k?>.php"><?=$v['nome']?></a> </li><?
                     }
                     
                 ?>
