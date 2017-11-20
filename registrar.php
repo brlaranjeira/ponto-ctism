@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/registrar.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Ponto Bolsistas CTISM">
@@ -68,17 +69,31 @@ if (isset($_POST) && !empty($_POST)) {
 
     ?>
     <?=isset($msg)?$msg:''?>
-    <form method="post" action="">
-        <input type="hidden" name="evt" value="<?=Ponto::PONTO_ENTRADA?>">
-        <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
-    </form>
-    <form method="post" action="">
-        <input type="hidden" name="evt" value="<?=Ponto::PONTO_SAIDA?>">
-        <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
-    </form>
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="div-horario">
+                <h1 id="horario" hrinicial="<?=time()?>">
+                    <?=date('H:i:s', time());?>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row"><div class="col-xs-12">
+        <form method="post" action="">
+            <input type="hidden" name="evt" value="<?=Ponto::PONTO_ENTRADA?>">
+            <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
+        </form>
+    </div></div>
+    <div class="row"><div class="col-xs-12">
+        <form method="post" action="">
+            <input type="hidden" name="evt" value="<?=Ponto::PONTO_SAIDA?>">
+            <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
+        </form>
+    </div></div>
 </div>
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/registrar.js"></script>
 </html>

@@ -84,7 +84,7 @@
                         <th>Dia</th>
                         <th>Entrada</th>
                         <th>Saída</th>
-                        <th>Horas</th>
+                        <th class="td-right">Horas</th>
                     </tr>
                     <tr>
                         <th colspan="4" id="td-carregando" class="hidden" ></th>
@@ -100,5 +100,6 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
 </html>
