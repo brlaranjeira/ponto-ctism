@@ -28,74 +28,66 @@ require_once (__DIR__ . '/dao/Usuario.php');
 <body>
 
 
-
-        <label for="registro-evt">Bolsista</label>
+<div class="container">
+        <label for="registro-evt"><font size="5"><b>Bolsista</b></font></label>
         <?
         $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
         $pontos = Ponto::getByAttr('deferido',0,'=');
         $bolsistaSelecionado = isset($_GET['bolsista']) ? new Usuario($_GET['bolsista']) : $bolsistas[0];
         ?>
         <br/>
-        <div class=" col-xs- form-group">
+        <div id= "div-deferir" class=" col-xs- form-group">
             <?
             foreach ($pontos as $ponto) {
                 echo '<div class="row">';
 
 
-                // nome do bolsista
                 echo '<div class="col-xs-3">';
-              //  echo 'NOME';
-                echo '<br/>';
+                echo '<font size="4">';
                 echo $ponto->getUsuario()->getFullname();
-
+                echo '</font>';
                 echo '</div>';
 
-                // data e hora
                 echo '<div class="col-xs-3">';
-             //  echo 'DATA E HORA';
-                echo '<br/>';
+                echo '<font size="4">';
                 echo $ponto->getTimestamp();
+                echo '</font>';
                 echo '</div>';
 
-                // [entrada/saida/abono] motivo
                 echo '<div class="col-xs-3">';
-                echo 'MOTIVO';
-                echo '<br/>';
+                echo '<font size="3">';
+                echo '<b>';
                 echo '[';
                 echo $ponto->getEvent();
                 echo '] ';
+                echo '</b>';
                 echo $ponto->getJust();
+                echo '</font>';
                 echo '</div>';
 
-                // [botao aceita/botao cancela]
                 echo '<div class="col-xs-3">';
-              //  echo 'botoes';
-                echo '<br/>';
-                echo '<input type="button" name="Deferir" value="Deferir">';
-                echo "  ";
-                echo '<input type="button" name="Não Deferir" value="Não Deferir">';
+                    echo '<div class="btn-group">';
+                        $codigo=$ponto->getId();
+                        echo '<button cod="' . $codigo . '" class="btn btn-md btn-success btn-deferir">Deferir</button>';
+                        echo '<button cod="' . $codigo . '" class="btn btn-md btn-danger btn-indeferir">Não deferir</button>';
                 echo '</div>';
-
-
+                echo '</div>';
                 echo '</div>';
                 ?>
 
-
-
                 <?
-
-
-
-
-
-
-
                 echo    '</div>';
-
                 }?>
 
 
 </div>
+</div>
+</body>
+<script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/deferir.js"></script>
+</html>
 
 
 
