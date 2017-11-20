@@ -28,23 +28,73 @@ require_once (__DIR__ . '/dao/Usuario.php');
 <body>
 
 
-<div class="row">
-    <div class="col-md-3 col-xs-6 form-group">
+
         <label for="registro-evt">Bolsista</label>
         <?
         $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+        $pontos = Ponto::getByAttr('deferido',0,'=');
         $bolsistaSelecionado = isset($_GET['bolsista']) ? new Usuario($_GET['bolsista']) : $bolsistas[0];
         ?>
         <br/>
-        <div class="col-md-3 col-xs-6 form-group">
+        <div class=" col-xs- form-group">
             <?
-            foreach ($bolsistas as $bolsista) {
-                $bolsista->getUid()?> <?=$bolsista->getFullName();
+            foreach ($pontos as $ponto) {
+                echo '<div class="row">';
+
+
+                // nome do bolsista
+                echo '<div class="col-xs-3">';
+              //  echo 'NOME';
+                echo '<br/>';
+                echo $ponto->getUsuario()->getFullname();
+
+                echo '</div>';
+
+                // data e hora
+                echo '<div class="col-xs-3">';
+             //  echo 'DATA E HORA';
+                echo '<br/>';
+                echo $ponto->getTimestamp();
+                echo '</div>';
+
+                // [entrada/saida/abono] motivo
+                echo '<div class="col-xs-3">';
+                echo 'MOTIVO';
+                echo '<br/>';
+                echo '[';
+                echo $ponto->getEvent();
+                echo '] ';
+                echo $ponto->getJust();
+                echo '</div>';
+
+                // [botao aceita/botao cancela]
+                echo '<div class="col-xs-3">';
+              //  echo 'botoes';
+                echo '<br/>';
+                echo '<input type="button" name="Deferir" value="Deferir">';
+                echo "  ";
+                echo '<input type="button" name="Não Deferir" value="Não Deferir">';
+                echo '</div>';
+
+
+                echo '</div>';
+                ?>
+
+
+
+                <?
+
+
+
+
+
+
+
+                echo    '</div>';
 
                 }?>
 
-        </div>
-    </div>
+
 </div>
 
 
