@@ -39,6 +39,7 @@ function carregaTbConsulta( callbackSuccess , callbackError ) {
     var bolsista = document.getElementById('select-bolsista').value;
     var mes = document.getElementById('select-mes').value;
     var ano = document.getElementById('select-ano').value;
+    debugger;
     $.ajax('./ajax/tabelaconsulta.php',{
         method: 'get',
         data: {
@@ -54,7 +55,8 @@ function carregaTbConsulta( callbackSuccess , callbackError ) {
                 callbackSuccess();
             }
         }, error: function ( response ) {
-            alert('nao foi');
+            showMessage('[PONTO ELETRÔNICO]', 'Permissão negada', 'danger');
+            hideTdCarregando();
         }
     });
 }

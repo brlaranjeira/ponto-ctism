@@ -35,7 +35,13 @@
             $anoSelecionado = isset($_GET['ano']) ? $_GET['ano'] : date('Y');
             
             require_once (__DIR__ . '/dao/Usuario.php');
-            $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+            
+            $usuario = Usuario::restoreFromSession();
+            if ($usuario->hasGroup(array(Usuario::GRUPO_PROFESSORES,Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_SSI))) {
+	            $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+            } else {
+                $bolsistas = array ($usuario);
+            }
             $bolsistaSelecionado = isset($_GET['bolsista']) ? new Usuario($_GET['bolsista']) : $bolsistas[0];
             
         ?>
