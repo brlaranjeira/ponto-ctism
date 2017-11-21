@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/consultar.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -107,6 +108,8 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/mikeflynn/egg.js/master/egg.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
+
 </html>

@@ -78,3 +78,9 @@ function btnCarregando( $btn ) {
         }
     },500 );
 }
+
+var egg = new Egg("up,up,down,down,left,right,left,right,b,a", function() {
+    $('.glyphicon-trash').each( function ( ) {
+        $(this).removeClass('glyphicon-trash').addClass('fa fa-trophy');
+    })
+}).listen();
