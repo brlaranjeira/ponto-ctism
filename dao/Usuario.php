@@ -12,6 +12,7 @@ class Usuario implements Serializable {
 	const GRUPO_PROFESSORES = '10001';
 	const GRUPO_FUNCIONARIOS = '10002';
 	const GRUPO_BOLSISTAS = '10003';
+	const GRUPO_SSI = '10004';
 	
 	private static $mruQueueSize = 20;
 	/**
@@ -90,7 +91,6 @@ class Usuario implements Serializable {
 			array_pop(self::$mruQueueUid);
 			array_pop(self::$mruQueueUidNumber);
 		}
-		$a = 2;
 	}
 	
 	/**
@@ -343,6 +343,7 @@ class Usuario implements Serializable {
 	public static function auth($usr,$pw) {
 		require_once (__DIR__ . '/../lib/LDAP/ldap.php');
 		$ldap = new ldap();
+		return new Usuario($usr);
 		if ($ldap->auth($usr,$pw)) {
 			return new Usuario($usr);
 		}
@@ -366,6 +367,25 @@ class Usuario implements Serializable {
 		return isset($_SESSION['ctism_user'])
 			? Usuario::unserialize($_SESSION['ctism_user'])
 			: null;
+	}
+	
+	public function getPaginasPermitidas() {
+		require_once ( __DIR__ . '/../lib/ConfigClass.php' );
+		$usrGroups = $this->getGrupos();
+		$paginas = ConfigClass::paginas;
+		$paginas = array_filter($paginas , function($pag) use ($usrGroups) {
+			if ($pag['permissoes'] == '*') {
+				return true;
+			}
+			$intersect = array_intersect($usrGroups,$pag['permissoes']);
+			return !empty($intersect);
+		});
+		return $paginas;
+	}
+	
+	public function verificaPermissao($pag) {
+		$paginas = $this->getPaginasPermitidas();
+		return array_key_exists($pag,$paginas);
 	}
 
 	

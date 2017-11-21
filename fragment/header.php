@@ -10,7 +10,14 @@ require_once (__DIR__ . '/../dao/Usuario.php');
 $usuario = Usuario::restoreFromSession();
 if (!isset($usuario)) {
     header('Location: ' . './login.php');
+    die();
 }
+$current = explode('.',basename($_SERVER['PHP_SELF']))[0];
+if (!$usuario->verificaPermissao($current)) {
+	header('Location: ' . './main.php');
+	die();
+}
+$paginas = $usuario->getPaginasPermitidas();
 ?>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="container">
@@ -25,11 +32,28 @@ if (!isset($usuario)) {
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="consultar.php">Consultar</a></li>
-				<li class="active"><a href="registrar.php">Registrar</a></li>
-				<li class="active"><a href="justificar.php">Justificar</a></li>
-				<li class="active"><a href="abonar.php">Abonar horas</a></li>
-				<li class="active"><a href="deferir.php">Deferir registros</a></li>
+                <?
+//                    require_once ( __DIR__ . '/../lib/ConfigClass.php' );
+//                    $usrGroups = $usuario->getGrupos();
+//                    $paginas = ConfigClass::paginas;
+//                    $paginas = array_filter($paginas , function($pag) use ($usrGroups) {
+//                        if ($pag['permissoes'] == '*') {
+//                            return true;
+//                        }
+//                        $intersect = array_intersect($usrGroups,$pag['permissoes']);
+//                        return !empty($intersect);
+//                    });
+                    foreach ($paginas as $k => $v) {
+                        $clActive = $current == $k ? 'class="active"' : '';
+                        ?><li <?=$clActive?>><a href="<?=$k?>.php"><?=$v['nome']?></a> </li><?
+                    }
+                    
+                ?>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><?=$usuario->getFullName()?></a></li>
+                <li><a>|</a></li>
+				<li><a href="logout.php">Sair</a></li>
 			</ul>
 		</div>
 	</div>

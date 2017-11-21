@@ -9,27 +9,48 @@
 require_once (__DIR__.'/../dao/Ponto.php');
 require_once (__DIR__.'/../dao/Usuario.php');
 require_once (__DIR__ . '/../lib/Utils.php');
+$usr = Usuario::restoreFromSession();
 $bolsista = $_REQUEST['bolsista'];
 $bolsista = (new Usuario($bolsista))->getUidnumber();
 $ano = $_REQUEST['ano'];
 $mes = $_REQUEST['mes'];
 
-function linkJustificativa( $evt , $dt='' ) {
-	$dt = explode('-',explode(' ',$dt)[0]);
-	$dt = $dt[2] . $dt[1] . $dt[0];
-	return "<a href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
+function linkJustificativa( $bolsista , $evt , $dt='' ) {
+	$usr = Usuario::restoreFromSession();
+	$usr = $usr->getUidNumber();
+	if ($usr == $bolsista)  {
+		$dt = explode('-',explode(' ',$dt)[0]);
+		$dt = $dt[2] . $dt[1] . $dt[0];
+		return "<a href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
+	} else {
+		return 'Registro ausente';
+	}
+	
 }
 
 function buildTooltip ( $ponto ) {
 	$just = $ponto->getJust();
+	if ($ponto->getDeferido() == 0) {
+		$just = "$just
+Aguardando deferimento";
+	}
 	if ( isset($just) ) {
-		return "<a href=\"#\" data-toggle=\"tooltip\" title=\"$just\">
+		return "<a data-toggle=\"tooltip\" title=\"$just\">
 					<small>
 						<span class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span>
 					</small>
 				</a>";
 	}
 	return '';
+}
+
+
+function buildTrashBtn ( $usr,  $ponto ) {
+	if ($ponto->getUsuario()->getUid() == $usr->getUid()) {
+		return '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+	} else {
+		return '';
+	}
 }
 
 $dtIni= "$ano-$mes-01 00:00:00";
@@ -51,7 +72,12 @@ if (empty($pontos)) {
 	echo '<tr><td colspan="4">Nenhum registro encontrado</td></tr>';
 }
 
-
+if (!$usr->hasGroup(array(Usuario::GRUPO_PROFESSORES,Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_SSI))) {
+	if ($usr->getUidNumber() != $bolsista) {
+		http_response_code(400);
+		die();
+	}
+}
 
 
 
@@ -60,29 +86,34 @@ $totalTrab = 0;
 $totalAbono = 0;
 foreach ( $pontos as $ponto ) {
 	
-	$hora = $ponto->getTimestamp( Ponto::TS_HORARIO );
+	if ($deferido = $ponto->getDeferido() == 1) {
+		$hora = '<span>' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
+	} else {
+		$hora = '<span class="nao-deferido">' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
+	}
 	$tooltip = buildTooltip($ponto);
-	$btnDelete = '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+	$btnDelete = buildTrashBtn($usr, $ponto);
 	$hora .= " $btnDelete ";
 	if ($ponto->getEvent() != Ponto::PONTO_ABONO ) {
 		$hora .= " $tooltip";
 	}
+	
 	$data = $ponto->getTimestamp( Ponto::TS_DATA );
 	
 	
 	if ( $ponto->getEvent() == Ponto::PONTO_ENTRADA ) {
 		if ( ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) )   {
-			echo '<td>' . linkJustificativa(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
+			echo '<td>' . linkJustificativa($bolsista,Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
 		}
 		echo "<tr><td>$data</td><td>$hora</td>";
 	} elseif ( $ponto->getEvent() == Ponto::PONTO_SAIDA ) {
 		$pendencia = false;
 		if ( !isset( $anterior ) || $anterior->getEvent() == Ponto::PONTO_SAIDA ) {
-			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) . '</td>';
+			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa($bolsista,Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) . '</td>';
 			$pendencia = true;
 		} elseif ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA && $ponto->getTimestamp( Ponto::TS_DATA ) != $anterior->getTimestamp( Ponto::TS_DATA ) ) {
-			echo '<td>' . linkJustificativa(Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
-			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa(Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) .'</td>';
+			echo '<td>' . linkJustificativa($bolsista,Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
+			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa($bolsista,Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) .'</td>';
 			$pendencia = true;
 		}
 		echo "<td>$hora</td>";
@@ -99,7 +130,7 @@ foreach ( $pontos as $ponto ) {
 		$anterior = $ponto;
 	} elseif ($ponto->getEvent() == Ponto::PONTO_ABONO) {
 		if ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) {
-			echo '<td>' . linkJustificativa( Ponto::PONTO_SAIDA , $anterior->getTimestamp() ) . '</td>';
+			echo '<td>' . linkJustificativa( $bolsista,Ponto::PONTO_SAIDA , $anterior->getTimestamp() ) . '</td>';
 			echo '<td class="td-right">Impossível calcular</td></tr>';
 		}
 		echo '<tr><td>' . $data . '</td><td colspan="2">Abono de horas' . $tooltip . '</td>';
