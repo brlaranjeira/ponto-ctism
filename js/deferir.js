@@ -1,10 +1,32 @@
 
 $('#div-deferir') .on("click", ".btn-deferir", function () {
-    alert("DEFERIDO");
-    window.location.reload();
+    var cod = $(this).attr('cod');
+    confirmModal("Deseja REALMENTE deferir esse registro?", function () {
+        $.ajax('./ajax/deferir.php',{
+            type: 'post',
+            data:{
+                cod: cod
+            },
+            success: function (response) {
+                alert (response);
+            }, error: function (response) {
+                alert ("ERRO");
+            }
+        })
+        window.location.reload();
+    })
+
+
 });
 
 $('#div-deferir') .on("click", ".btn-indeferir", function () {
-    alert("NÃO DEFERIDO");
-    window.location.reload();
+    var cod = $(this).attr('cod');
+    confirmModal("Deseja REALMENTE não deferir esse registro?", function () {
+        $.ajax('./ajax/deferir.php',{
+
+            }
+        })
+        window.location.reload();
+    })
+
 });
