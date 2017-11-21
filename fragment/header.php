@@ -33,21 +33,10 @@ $paginas = $usuario->getPaginasPermitidas();
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
                 <?
-//                    require_once ( __DIR__ . '/../lib/ConfigClass.php' );
-//                    $usrGroups = $usuario->getGrupos();
-//                    $paginas = ConfigClass::paginas;
-//                    $paginas = array_filter($paginas , function($pag) use ($usrGroups) {
-//                        if ($pag['permissoes'] == '*') {
-//                            return true;
-//                        }
-//                        $intersect = array_intersect($usrGroups,$pag['permissoes']);
-//                        return !empty($intersect);
-//                    });
                     foreach ($paginas as $k => $v) {
                         $clActive = $current == $k ? 'class="active"' : '';
                         ?><li <?=$clActive?>><a href="<?=$k?>.php"><?=$v['nome']?></a> </li><?
                     }
-                    
                 ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
