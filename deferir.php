@@ -30,7 +30,9 @@ require_once (__DIR__ . '/dao/Usuario.php');
 
 
 <div class="container">
-        <label for="registro-evt"><font size="5"><b>Bolsista</b></font></label>
+    <h3>
+        <label for="registro-evt"><b>Bolsista</b></label>
+    </h3>
         <?
         $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
         $pontos = Ponto::getByAttr('deferido',0,'=');
@@ -44,26 +46,20 @@ require_once (__DIR__ . '/dao/Usuario.php');
 
 
                 echo '<div class="col-xs-3">';
-                echo '<font size="4">';
                 echo $ponto->getUsuario()->getFullname();
-                echo '</font>';
                 echo '</div>';
 
                 echo '<div class="col-xs-3">';
-                echo '<font size="4">';
                 echo $ponto->getTimestamp();
-                echo '</font>';
                 echo '</div>';
 
                 echo '<div class="col-xs-3">';
-                echo '<font size="3">';
                 echo '<b>';
                 echo '[';
                 echo $ponto->getEvent();
                 echo '] ';
                 echo '</b>';
                 echo $ponto->getJust();
-                echo '</font>';
                 echo '</div>';
 
                 echo '<div class="col-xs-3">';
@@ -71,7 +67,6 @@ require_once (__DIR__ . '/dao/Usuario.php');
                         $codigo=$ponto->getId();
                         echo '<button cod="' . $codigo . '" class="btn btn-md btn-success btn-deferir">Deferir</button>';
                         echo '<button cod="' . $codigo . '" class="btn btn-md btn-danger btn-indeferir">Não deferir</button>';
-                echo '</div>';
                 echo '</div>';
                 echo '</div>';
                 ?>
@@ -87,6 +82,7 @@ require_once (__DIR__ . '/dao/Usuario.php');
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/deferir.js"></script>
 </html>
 
