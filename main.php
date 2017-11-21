@@ -11,6 +11,9 @@ $usr = Usuario::restoreFromSession();
 $to = './login.php';
 if (isset($usr)) {
 	//TODO: ver grupos
-	$to = './consultar.php';
+	require_once (__DIR__ . '/lib/ConfigClass.php');
+	$paginas = array_keys($usr->getPaginasPermitidas());
+	
+	$to = './' . $paginas[0] . '.php';
 }
 header('Location: ' . $to);

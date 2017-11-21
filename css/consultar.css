@@ -32,3 +32,11 @@
 #tb-registros span.glyphicon.glyphicon-info-sign {
     vertical-align: top;
 }
+
+.nao-deferido {
+    color: darkred;
+}
+
+.tooltip-inner {
+    white-space:pre-wrap;
+}

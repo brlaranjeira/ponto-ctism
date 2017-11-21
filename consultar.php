@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/consultar.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,7 +35,13 @@
             $anoSelecionado = isset($_GET['ano']) ? $_GET['ano'] : date('Y');
             
             require_once (__DIR__ . '/dao/Usuario.php');
-            $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+            
+            $usuario = Usuario::restoreFromSession();
+            if ($usuario->hasGroup(array(Usuario::GRUPO_PROFESSORES,Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_SSI))) {
+	            $bolsistas = Usuario::getAllFromGroup(Usuario::GRUPO_BOLSISTAS);
+            } else {
+                $bolsistas = array ($usuario);
+            }
             $bolsistaSelecionado = isset($_GET['bolsista']) ? new Usuario($_GET['bolsista']) : $bolsistas[0];
             
         ?>
