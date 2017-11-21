@@ -21,7 +21,7 @@ function linkJustificativa( $bolsista , $evt , $dt='' ) {
 	if ($usr == $bolsista)  {
 		$dt = explode('-',explode(' ',$dt)[0]);
 		$dt = $dt[2] . $dt[1] . $dt[0];
-		return "<a href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
+		return "<a class='link-justificativa' href=\"./justificar.php?dt=$dt&evt=$evt\">Adicionar Justificativa</a>";
 	} else {
 		return 'Registro ausente';
 	}
@@ -37,7 +37,7 @@ Aguardando deferimento";
 	if ( isset($just) ) {
 		return "<a data-toggle=\"tooltip\" title=\"$just\">
 					<small>
-						<span class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span>
+						<span class=\"fa fa-info-circle\" aria-hidden=\"true\"></span>
 					</small>
 				</a>";
 	}
@@ -47,7 +47,7 @@ Aguardando deferimento";
 
 function buildTrashBtn ( $usr,  $ponto ) {
 	if ($ponto->getUsuario()->getUid() == $usr->getUid()) {
-		return '<button class="btn-delete btn btn-danger btn-apagar btn-small"' . 'cod="' . $ponto->getId() . '"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+		return '<button class="btn-delete btn btn-danger btn-apagar btn-sm"' . 'cod="' . $ponto->getId() . '"><span class="fa fa-trash-o" aria-hidden="true"></span></button>';
 	} else {
 		return '';
 	}

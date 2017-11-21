@@ -9,7 +9,7 @@
 }
 
 .btn-apagar {
-    width: 40px;
+    /*width: 40px;*/
 }
 
 #tb-registros > thead {
@@ -29,8 +29,9 @@
     /*text-align: center;*/
 }
 
-#tb-registros span.glyphicon.glyphicon-info-sign {
+#tb-registros span.fa.fa-info-circle {
     vertical-align: top;
+    color: #5bc0de;
 }
 
 .nao-deferido {
@@ -39,4 +40,8 @@
 
 .tooltip-inner {
     white-space:pre-wrap;
+}
+
+a.link-justificativa {
+    color: #5bc0de;
 }
