@@ -161,7 +161,7 @@ class Ponto extends EntidadeAbstrata {
 	}
 	
 	/**
-	 * @param bool $deferido
+	 * @param void $deferido
 	 */
 	public function setDeferido( $deferido ) {
 		$this->deferido = $deferido;
