@@ -16,4 +16,10 @@ $(document).ready( function () {
         $('#horario').text(h + ':' + m + ':' + s);
 
     },1000);
+    var $spanMensagem = $('#span-mensagem');
+    if ($spanMensagem.length) {
+        var mensagem = $spanMensagem.text();
+        showMessage('[PONTO ELETRÔNICO]',mensagem);
+    }
+
 });

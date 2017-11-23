@@ -35,11 +35,11 @@ function buildTooltip ( $ponto ) {
 Aguardando deferimento";
 	}
 	if ( isset($just) ) {
-		return "<a data-toggle=\"tooltip\" title=\"$just\">
+		return "<span class='x' data-toggle=\"tooltip\" title=\"$just\">
 					<small>
 						<span class=\"fa fa-info-circle\" aria-hidden=\"true\"></span>
 					</small>
-				</a>";
+				</span>";
 	}
 	return '';
 }
@@ -84,6 +84,8 @@ if (!$usr->hasGroup(array(Usuario::GRUPO_PROFESSORES,Usuario::GRUPO_FUNCIONARIOS
 $anterior = null;
 $totalTrab = 0;
 $totalAbono = 0;
+$pendenciaAbonos = false;
+$pendenciaTrab = false;
 foreach ( $pontos as $ponto ) {
 	
 	if ($deferido = $ponto->getDeferido() == 1) {
@@ -92,6 +94,7 @@ foreach ( $pontos as $ponto ) {
 		$hora = '<span class="nao-deferido">' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
 	}
 	$tooltip = buildTooltip($ponto);
+	$withtooltip = empty($tooltip) ? '' : 'td-with-tooltip';
 	$btnDelete = buildTrashBtn($usr, $ponto);
 	$hora .= " $btnDelete ";
 	if ($ponto->getEvent() != Ponto::PONTO_ABONO ) {
@@ -102,11 +105,14 @@ foreach ( $pontos as $ponto ) {
 	
 	
 	if ( $ponto->getEvent() == Ponto::PONTO_ENTRADA ) {
+		$ponto->getDeferido() == 0 and $pendenciaTrab = true;
 		if ( ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) )   {
 			echo '<td>' . linkJustificativa($bolsista,Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
+			$pendenciaTrab = true;
 		}
-		echo "<tr><td>$data</td><td>$hora</td>";
+		echo "<tr><td class='td-left'>$data</td><td class='$withtooltip'>$hora</td>";
 	} elseif ( $ponto->getEvent() == Ponto::PONTO_SAIDA ) {
+		$ponto->getDeferido() == 0 and $pendenciaTrab = true;
 		$pendencia = false;
 		if ( !isset( $anterior ) || $anterior->getEvent() == Ponto::PONTO_SAIDA ) {
 			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa($bolsista,Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) . '</td>';
@@ -115,16 +121,20 @@ foreach ( $pontos as $ponto ) {
 			echo '<td>' . linkJustificativa($bolsista,Ponto::PONTO_SAIDA,$anterior->getTimestamp()) . '</td><td class="td-right">Impossível calcular</td></tr>';
 			echo '<tr><td>'.$data.'</td><td>' . linkJustificativa($bolsista,Ponto::PONTO_ENTRADA,$ponto->getTimestamp()) .'</td>';
 			$pendencia = true;
+			$pendenciaTrab = true;
 		}
-		echo "<td>$hora</td>";
+		echo "<td class='$withtooltip'>$hora</td>";
+		
 		if ($pendencia) {
 			echo '<td class="td-right">Impossível calcular</td>';
+			$pendenciaTrab = true;
 		} else {
 			
 			$diff = Utils::timeDiff($ponto->getTimestamp(Ponto::TS_HORARIO),$anterior->getTimestamp(Ponto::TS_HORARIO));
 			$totalTrab += $diff;
 			$tempo = Utils::secondsToStrtime($diff);
-			echo "<td class='td-right'>$tempo</td>";
+			$naoDef = ($ponto->getDeferido() == 0 || $anterior->getDeferido() == 0) ? 'nao-deferido' : '';
+			echo "<td class='$naoDef td-right'>$tempo</td>";
 		}
 		echo '</tr>';
 		$anterior = $ponto;
@@ -132,7 +142,9 @@ foreach ( $pontos as $ponto ) {
 		if ( isset( $anterior ) && $anterior->getEvent() == Ponto::PONTO_ENTRADA ) {
 			echo '<td>' . linkJustificativa( $bolsista,Ponto::PONTO_SAIDA , $anterior->getTimestamp() ) . '</td>';
 			echo '<td class="td-right">Impossível calcular</td></tr>';
+			$pendenciaTrab = true;
 		}
+		$ponto->getDeferido() == 0 and $pendenciaAbonos = true;
 		echo '<tr><td>' . $data . '</td><td colspan="2">Abono de horas' . $tooltip . '</td>';
 		echo '<td class="td-right">' . $hora . '</td></tr>';
 		$horaParts = explode( ':' , $hora );
@@ -140,8 +152,9 @@ foreach ( $pontos as $ponto ) {
 	}
 	$anterior = $ponto->getEvent() == Ponto::PONTO_ABONO ? $anterior : $ponto;
 }
-echo '<tr class="bottom"><td colspan="3">Total de horas trabalhadas</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab) . '</td></tr>';
-echo '<tr><td colspan="3">Total de horas abonada</td><td class="td-right">'. Utils::secondsToStrtime($totalAbono) . '</td></tr>';
-echo '<tr><td colspan="3">Total (Trabalhadas + Abonadas)</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab + $totalAbono) . '</td></tr>';
+
+echo '<tr class="bottom"><td class="td-left" colspan="3">Total de horas trabalhadas</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab) . '</td></tr>';
+echo '<tr><td class="td-left" colspan="3">Total de horas abonada</td><td class="td-right">'. Utils::secondsToStrtime($totalAbono) . '</td></tr>';
+echo '<tr><td class="td-left" colspan="3">Total (Trabalhadas + Abonadas)</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab + $totalAbono) . '</td></tr>';
 
 ?>

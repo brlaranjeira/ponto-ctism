@@ -32,8 +32,12 @@ require_once (__DIR__ . '/dao/Usuario.php');
 if (isset($_POST) && ! empty($_POST)) {
 	
     $usuario = Usuario::restoreFromSession();
-    $tsParts = explode(' ',$_POST['registro-dthr']);
-    $dtParts = explode('/',$tsParts[0]);
+    if (!$usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
+        header('Location: ./main.php');
+        die();
+    }
+    $tsParts = explode(' ' , $_POST['registro-dthr'] );
+    $dtParts = explode('/' , $tsParts[0] );
     $dt = $dtParts[2] . '-' . $dtParts[1] . '-' . $dtParts[0];
     $hr = $tsParts[1] . ':00';
     
@@ -46,7 +50,7 @@ if (isset($_POST) && ! empty($_POST)) {
 	$ponto->setJust($_POST['registro-motivo']);
 	
 	if ( $ponto->save() ) {
-		$msg = 'Justificativa registrada/solicitada.';
+		$msg = 'Justificativa registrada!';
 	}
 	
 }
@@ -55,7 +59,11 @@ if (isset($_POST) && ! empty($_POST)) {
 ?>
 
 <div class="container">
-	<?=isset($msg) ? $msg : ''?>
+	<?
+	if (isset($msg) && !empty($msg)) {
+		echo "<span class=\"hidden\" id=\"span-mensagem\">$msg</span>";
+	}
+    ?>
     <form action="" method="post">
         <div class="row">
             <div class="col-md-6 col-xs-12 form-group">
@@ -96,5 +104,7 @@ if (isset($_POST) && ! empty($_POST)) {
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/egg/egg.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/justificar.js"></script>
 </html>
