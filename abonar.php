@@ -29,6 +29,10 @@ if (!empty($_POST)) {
 	require_once (__DIR__ . '/dao/Ponto.php');
 	require_once (__DIR__ . '/dao/Usuario.php');
 	$usuario = Usuario::restoreFromSession();
+	if ($usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
+		header('Location: ./main.php');
+		die();
+	}
 	$ponto = new Ponto();
 	$ponto->setIp();
 	$ponto->setUsuario($usuario);

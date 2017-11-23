@@ -36,6 +36,10 @@ require_once (__DIR__ . '/dao/Usuario.php');
 
 if (isset($_POST) && !empty($_POST)) {
 	$usuario = Usuario::restoreFromSession();
+	if ($usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
+		header('Location: ./main.php');
+		die();
+	}
     $ponto = new Ponto();
 	$ponto->setIp();
 	$ponto->setUsuario($usuario);
@@ -67,8 +71,10 @@ if (isset($_POST) && !empty($_POST)) {
             $hlEntrada = $ultimo[0]->getEvent() == Ponto::PONTO_SAIDA;
         }
 
+        if (isset($msg) && !empty($msg)) {
+            echo "<span class=\"hidden\" id=\"span-mensagem\">$msg</span>";
+        }
     ?>
-    <?=isset($msg)?$msg:''?>
     <div class="row">
         <div class="col-xs-12">
             <div id="div-horario">
@@ -95,5 +101,6 @@ if (isset($_POST) && !empty($_POST)) {
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/registrar.js"></script>
 </html>
