@@ -22,4 +22,24 @@ $(document).ready( function () {
         showMessage('[PONTO ELETRÔNICO]',mensagem);
     }
 
+    $('#div-registrar').on('click','.btn-registro',function() {
+        var evt = $(this).attr('evt');
+        var $thisBtn = $(this);
+        var $otherBtn = $('#div-registrar').find('button.btn-registro').not('[evt="' + evt + '"]').first();
+        debugger;
+        $.ajax('./ajax/registrar.php', {
+            type: 'post',
+            data: { evt: evt },
+            success: function ( response ) {
+                response  = JSON.parse( response );
+                showMessage('PONTO ELETRÔNICO]', response.message);
+                $thisBtn.removeClass('btn-hl');
+                $otherBtn.addClass('btn-hl');
+            }, error: function ( response ) {
+                console.log(response );
+                debugger;
+            }
+        })
+    })
+
 });
