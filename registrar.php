@@ -27,30 +27,11 @@
 <body>
 
 <?
+require_once (__DIR__ . '/dao/Usuario.php');
+require_once (__DIR__ . '/dao/Ponto.php');
+$usuario = Usuario::restoreFromSession();
 
 include "./fragment/header.php";
-
-require_once (__DIR__ . '/dao/Ponto.php');
-require_once (__DIR__ . '/dao/Usuario.php');
-
-
-if (isset($_POST) && !empty($_POST)) {
-	$usuario = Usuario::restoreFromSession();
-	if ($usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
-		header('Location: ./main.php');
-		die();
-	}
-    $ponto = new Ponto();
-	$ponto->setIp();
-	$ponto->setUsuario($usuario);
-    $ponto->setEvent($_POST['evt']);
-    if ($ponto->save()) {
-        $msg = 'Evento registrado!';
-    }
-    
-}
-
-
 
 ?>
 
@@ -84,18 +65,18 @@ if (isset($_POST) && !empty($_POST)) {
             </div>
         </div>
     </div>
-    <div class="row"><div class="col-xs-12">
-        <form method="post" action="">
-            <input type="hidden" name="evt" value="<?=Ponto::PONTO_ENTRADA?>">
-            <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
-        </form>
-    </div></div>
-    <div class="row"><div class="col-xs-12">
-        <form method="post" action="">
-            <input type="hidden" name="evt" value="<?=Ponto::PONTO_SAIDA?>">
-            <button class="btn btn-lg btn-info btn-block <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
-        </form>
-    </div></div>
+    <div id="div-registrar">
+        <div class="row">
+            <div class="col-xs-12">
+                <button evt="<?=Ponto::PONTO_ENTRADA?>" class="btn btn-lg btn-info btn-block btn-registro <?=$hlEntrada?'btn-hl':''?> " type="submit">Entrada</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button evt="<?=Ponto::PONTO_SAIDA?>" class="btn btn-lg btn-info btn-block btn-registro <?=$hlEntrada?'':'btn-hl'?> " type="submit">Saída</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
