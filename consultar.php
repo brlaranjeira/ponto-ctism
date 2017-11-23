@@ -89,10 +89,10 @@
                 <table id="tb-registros" class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Dia</th>
-                        <th>Entrada</th>
-                        <th>Saída</th>
-                        <th class="td-right">Horas</th>
+                        <th width="10%" class="td-left">Dia</th>
+                        <th width="30%">Entrada</th>
+                        <th width="30%">Saída</th>
+                        <th width="30%" class="td-right">Horas</th>
                     </tr>
                     <tr>
                         <th colspan="4" id="td-carregando" class="hidden" ></th>
@@ -108,7 +108,7 @@
 </body>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/mikeflynn/egg.js/master/egg.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/egg/egg.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/consultar.js"></script>
 

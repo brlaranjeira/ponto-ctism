@@ -9,7 +9,6 @@
 }
 
 .btn-apagar {
-    /*width: 40px;*/
 }
 
 #tb-registros > thead {
@@ -24,9 +23,14 @@
     text-align: right;
     font-weight: bold;
 }
+#tb-registros .td-left {
+    text-align: left;
+}
 
-#tb-registros :not(.td-right) {
-    /*text-align: center;*/
+#tb-registros :not(.td-right):not(.td-left) {
+    position: relative;
+    /*left: 10px;*/
+    text-align: center;
 }
 
 #tb-registros span.fa.fa-info-circle {
@@ -35,13 +39,22 @@
 }
 
 .nao-deferido {
-    color: darkred;
+    color: #d9534f;
 }
 
 .tooltip-inner {
     white-space:pre-wrap;
 }
 
+.td-with-tooltip {
+    left:10px;
+}
+
 a.link-justificativa {
     color: #5bc0de;
+}
+
+span.x[data-toggle="tooltip"]:hover {
+    text-decoration: none;
+    outline: initial;
 }

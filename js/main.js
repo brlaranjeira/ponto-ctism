@@ -44,3 +44,13 @@ function confirmModal( mensagem, callbackOk, callbackCancel, labelOk, labelCance
     $('#modal-confirm').modal('show');
 
 }
+
+new Egg("t,h,e,c,a,g,e", function () {
+    $('body').css('background-image',"url('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')").
+    css('background-repeat','repeat').css('background-position','0 0 ');
+}).listen();
+
+new Egg('c,t,i,s,m,5,0', function () {
+    $('body').css('background-image',"url('https://www.ctism.ufsm.br/arquivos/imagens/ctism-50-anos.png')").
+    css('background-repeat','repeat').css('background-position','0 0 ').css('background-size','10%');
+}).listen();
