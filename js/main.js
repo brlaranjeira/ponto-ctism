@@ -15,6 +15,11 @@ function showTdCarregando() {
     $('#td-carregando').removeClass('hidden');
 }
 
+function showModal( _html ) {
+    $('#modal-custom .modal-body').html( _html );
+    $('#modal-custom').modal('show');
+}
+
 function confirmModal( mensagem, callbackOk, callbackCancel, labelOk, labelCancel ) {
 
     /* LABEL PRINCIPAL */
@@ -44,6 +49,8 @@ function confirmModal( mensagem, callbackOk, callbackCancel, labelOk, labelCance
     $('#modal-confirm').modal('show');
 
 }
+
+
 
 new Egg("t,h,e,c,a,g,e", function () {
     $('body').css('background-image',"url('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')").
