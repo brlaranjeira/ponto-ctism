@@ -153,8 +153,12 @@ foreach ( $pontos as $ponto ) {
 	$anterior = $ponto->getEvent() == Ponto::PONTO_ABONO ? $anterior : $ponto;
 }
 
-echo '<tr class="bottom"><td class="td-left" colspan="3">Total de horas trabalhadas</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab) . '</td></tr>';
-echo '<tr><td class="td-left" colspan="3">Total de horas abonada</td><td class="td-right">'. Utils::secondsToStrtime($totalAbono) . '</td></tr>';
-echo '<tr><td class="td-left" colspan="3">Total (Trabalhadas + Abonadas)</td><td class="td-right">'. Utils::secondsToStrtime($totalTrab + $totalAbono) . '</td></tr>';
+$clsSpanHoras = $pendenciaTrab ? 'class="nao-deferido"' : '';
+$clsSpanAbono = $pendenciaAbonos ? 'class="nao-deferido"' : '';
+$clsSpanTotal = ( $pendenciaTrab || $pendenciaAbonos ) ? 'class="nao-deferido"' : '';
+
+echo '<tr class="bottom"><td class="td-left" colspan="3">Total de horas trabalhadas</td><td class="td-right"><span ' . $clsSpanHoras . '>' . Utils::secondsToStrtime($totalTrab) . '</span></td></tr>';
+echo '<tr><td class="td-left" colspan="3">Total de horas abonada</td><td class="td-right"><span ' . $clsSpanAbono . '>'. Utils::secondsToStrtime($totalAbono) . '</span></td></tr>';
+echo '<tr><td class="td-left" colspan="3">Total (Trabalhadas + Abonadas)</td><td class="td-right"><span ' . $clsSpanTotal . '>'. Utils::secondsToStrtime($totalTrab + $totalAbono) . '</span></td></tr>';
 
 ?>
