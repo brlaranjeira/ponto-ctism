@@ -64,11 +64,11 @@ if (isset($_POST) && ! empty($_POST)) {
 		echo "<span class=\"hidden\" id=\"span-mensagem\">$msg</span>";
 	}
     ?>
-    <form action="" method="post">
+    <form id="form-justificar" action="" method="post">
         <div class="row">
             <div class="col-md-6 col-xs-12 form-group">
                 <label for="registro-evt">Evento</label>
-                <select name="registro-evt" id="registro-evt" class="form-control">
+                <select id="registro-evt" name="registro-evt" id="registro-evt" class="form-control">
                     <option <?=isset($_GET['evt']) && $_GET['evt'] == Ponto::PONTO_ENTRADA ? 'selected' : '' ?> value="<?=Ponto::PONTO_ENTRADA?>">Entrada</option>
                     <option <?=isset($_GET['evt']) && $_GET['evt'] == Ponto::PONTO_SAIDA ? 'selected' : '' ?> value="<?=Ponto::PONTO_SAIDA?>">Sa&iacute;da</option>
                 </select>
