@@ -36,8 +36,15 @@ $(document).ready( function () {
                 $thisBtn.removeClass('btn-hl');
                 $otherBtn.addClass('btn-hl');
             }, error: function ( response ) {
-                console.log(response );
-                debugger;
+                var responseText = JSON.parse(response.responseText);
+                switch (response.status) {
+                    case 302:
+                        window.location.href = responseText.href;
+                        break;
+                    default:
+                        showMessage('[PONTO ELETRÔNICO]',responseText.message,'danger');
+                        break;
+                }
             }
         })
     })
