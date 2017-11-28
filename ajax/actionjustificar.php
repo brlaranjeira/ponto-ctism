@@ -28,7 +28,21 @@ $ponto->setTimestamp("$dt $hr");
 $ponto->setJust($_POST['registromotivo']);
 if ($ponto->save()) {
 	http_response_code(200);
-	echo '{"message": "Justificativa registrada."}';
+	$json = [
+		'message' => "Justificativa registrada. Deseja enviar e-mail para avisar o(a) coordenador(a) da bolsa?",
+		'html' => "
+<div class='container-fluid'>
+	<div class='row'>
+		<div class='col-xs-12'>
+			<div class='form-group'>
+				<label for='mail-coord'>Digite o endereço de e-mail</label><input id='mail-coord' name='mail-coord' class='form-control' type='text' />
+			</div>
+		</div>
+	</div>
+</div>
+"
+	];
+	echo json_encode($json);
 } else {
 	http_response_code(500);
 	echo '{"message": "Erro interno.\nCaso o erro persista, contate o setor responsável."}';

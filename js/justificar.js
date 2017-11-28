@@ -16,10 +16,17 @@ $('#form-justificar').submit( function ( evt ) {
             registrodthr: document.getElementById('registro-dthr').value
         }, success: function ( response ) {
             response = JSON.parse(response)
-            showModal( '<h7>'+response.message+'</h7>' );
-            //TODO: Adicionar campo de email
+            confirmModal( '<h7>'+response.message+'</h7>' + response.html );
         }, error: function ( response ) {
-            showMessage('[PONTO ELETRÔNICO]', response.responseText,'danger');
+            var responseText = JSON.parse(response.responseText);
+            switch (response.status) {
+                case 302:
+                    window.location.href = responseText.href;
+                    break;
+                default:
+                    showMessage('[PONTO ELETRÔNICO]',responseText.message,'danger');
+                    break;
+            }
         }
     });
     return false;

@@ -25,35 +25,15 @@
 
 <?
 include "./fragment/header.php";
-if (!empty($_POST)) {
-	require_once (__DIR__ . '/dao/Ponto.php');
-	require_once (__DIR__ . '/dao/Usuario.php');
-	$usuario = Usuario::restoreFromSession();
-	if ($usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
-		header('Location: ./main.php');
-		die();
-	}
-	$ponto = new Ponto();
-	$ponto->setIp();
-	$ponto->setUsuario($usuario);
-	$ponto->setEvent(Ponto::PONTO_ABONO);
-	$dtParts = explode('/',$_POST['dataabono']);
-	$data = $dtParts[2].'-'.$dtParts[1].'-'.$dtParts[0];
-	$hora = str_pad($_POST['horasabono'],2,'0',STR_PAD_LEFT).':'.str_pad($_POST['minutosabono'],2,'0',STR_PAD_LEFT).':00';
-	$ponto->setTimestamp("$data $hora");
-	$ponto->setJust($_POST['motivoabono']);
-	if ( $ponto->save() ) {
-	    $msg = 'Abono registrado/solicitado.';
-    }
- 
-}
+require_once (__DIR__ . '/dao/Ponto.php');
+require_once (__DIR__ . '/dao/Usuario.php');
+
 
 
 ?>
 
 <div class="container">
-    <?=isset($msg) ? $msg : ''?>
-    <form action="" method="post">
+    <form id="form-abonar" action="" method="post">
         <div class="row">
             <div class="form-group col-xs-12 col-md-4">
                 <label for="dataabono">Data</label>
@@ -86,5 +66,6 @@ if (!empty($_POST)) {
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.mask.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
 <script type="application/ecmascript" language="ecmascript" src="js/abonar.js"></script>
 </html>
