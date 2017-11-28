@@ -20,7 +20,7 @@ $('#tb-registros').on('click','.btn-delete',function() {
                         window.location.href = responseText.href;
                         break;
                     default:
-                        alert(responseText.message);
+                        showMessage('[PONTO ELETRÔNICO]',responseText.message,'danger');
                         break;
                 }
             }
