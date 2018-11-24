@@ -39,7 +39,6 @@ function carregaTbConsulta( callbackSuccess , callbackError ) {
     var bolsista = document.getElementById('select-bolsista').value;
     var mes = document.getElementById('select-mes').value;
     var ano = document.getElementById('select-ano').value;
-    debugger;
     $.ajax('./ajax/tabelaconsulta.php',{
         method: 'get',
         data: {

@@ -26,7 +26,6 @@ $(document).ready( function () {
         var evt = $(this).attr('evt');
         var $thisBtn = $(this);
         var $otherBtn = $('#div-registrar').find('button.btn-registro').not('[evt="' + evt + '"]').first();
-        debugger;
         $.ajax('./ajax/registrar.php', {
             type: 'post',
             data: { evt: evt },

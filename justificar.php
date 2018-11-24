@@ -30,8 +30,7 @@ require_once (__DIR__ . '/dao/Ponto.php');
 require_once (__DIR__ . '/dao/Usuario.php');
 
 if (isset($_POST) && ! empty($_POST)) {
-	
-    $usuario = Usuario::restoreFromSession();
+/*    $usuario = Usuario::restoreFromSession();
     if (!$usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
         header('Location: ./main.php');
         die();
@@ -51,8 +50,7 @@ if (isset($_POST) && ! empty($_POST)) {
 	
 	if ( $ponto->save() ) {
 		$msg = 'Justificativa registrada!';
-	}
-	
+	}*/
 }
 
 

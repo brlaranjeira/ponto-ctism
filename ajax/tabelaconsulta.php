@@ -34,7 +34,7 @@ function buildTooltip ( $ponto ) {
 		$just = "$just
 Aguardando deferimento";
 	}
-	if ( isset($just) ) {
+	if ( isset($just) && !empty($just) ) {
 		return "<span class='x' data-toggle=\"tooltip\" title=\"$just\">
 					<small>
 						<span class=\"fa fa-info-circle\" aria-hidden=\"true\"></span>
@@ -87,7 +87,6 @@ $totalAbono = 0;
 $pendenciaAbonos = false;
 $pendenciaTrab = false;
 foreach ( $pontos as $ponto ) {
-	
 	if ($deferido = $ponto->getDeferido() == 1) {
 		$hora = '<span>' . $ponto->getTimestamp( Ponto::TS_HORARIO ) . '</span>';
 	} else {
@@ -147,7 +146,7 @@ foreach ( $pontos as $ponto ) {
 		$ponto->getDeferido() == 0 and $pendenciaAbonos = true;
 		echo '<tr><td>' . $data . '</td><td colspan="2">Abono de horas' . $tooltip . '</td>';
 		echo '<td class="td-right">' . $hora . '</td></tr>';
-		$horaParts = explode( ':' , $hora );
+		$horaParts = explode( ':' , $ponto->getTimestamp(Ponto::TS_HORARIO) );
 		$totalAbono += $horaParts[ 0 ] * 3600 + $horaParts[ 1 ] * 60 + $horaParts[ 2 ];
 	}
 	$anterior = $ponto->getEvent() == Ponto::PONTO_ABONO ? $anterior : $ponto;

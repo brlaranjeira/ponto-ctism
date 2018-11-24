@@ -26,6 +26,7 @@ $ponto->setUsuario($usr);
 $ponto->setEvent($_REQUEST['registroevt']);
 $ponto->setTimestamp("$dt $hr");
 $ponto->setJust($_POST['registromotivo']);
+/*if ($ponto->save(null,true,array('deferido','usuarioDeferidor'))) {*/
 if ($ponto->save()) {
 	http_response_code(200);
 	$json = [

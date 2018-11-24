@@ -53,13 +53,13 @@ class Ponto extends EntidadeAbstrata {
 	
 	protected static $tbName = 'ponto';
 	protected static $dicionario = [
-		'ip' => 'ip',
-		'usuario' => 'uid',
-		'event' => 'evt',
-		'timestamp' => 'dthr',
-		'just' => 'just',
+		'ip' => 'IP',
+		'usuario' => 'UID',
+		'event' => 'EVENT',
+		'timestamp' => 'TIMESTAMP',
+		'just' => 'JUST'/*,
 		'deferido' => 'deferido',
-		'usuarioDeferidor' => 'uid_deferidor'
+		'usuarioDeferidor' => 'uid_deferidor'*/
 	];
 	protected static $getters = [
 		'usuario' => 'getUsrUidNumber',
@@ -157,7 +157,8 @@ class Ponto extends EntidadeAbstrata {
 	 * @return bool
 	 */
 	public function getDeferido() {
-		return $this->deferido;
+		/*return $this->deferido;*/
+        return true;
 	}
 	
 	/**

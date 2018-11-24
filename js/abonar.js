@@ -12,14 +12,12 @@ $('#form-abonar').submit( function ( evt ) {
             motivoabono: document.getElementById('motivoabono').value
         },
         success: function ( response ) {
-            debugger;
             response = JSON.parse(response);
             var strModal = '<h7>' + response.message + '</h7>';
             strModal += response.html;
             confirmModal(strModal);
         }, error: function ( response ) {
             var responseText = JSON.parse(response.responseText);
-            debugger;
             switch (response.status) {
                 case 302:
                     window.location.href = responseText.href;

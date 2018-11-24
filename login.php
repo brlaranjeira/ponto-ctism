@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 
-
 <html lang="pt-br">
-
+<? ini_set("error_reporting",E_ALL);?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,7 +25,7 @@ if ( isset($_POST) == !empty($_POST) ) {
     $usuario = Usuario::auth($_POST['usuario'] , $_POST['senha'] );
     if ($usuario != null ) {
         $usuario->saveToSession();
-        header("Location: ./consultar.php");
+        header("Location: ./main.php");
     } else {
         echo "Usuario não encontrado";
     }

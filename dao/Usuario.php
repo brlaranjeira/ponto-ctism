@@ -101,7 +101,9 @@ class Usuario implements Serializable {
 	 * @param string $uidNumber
 	 */
 	public function __construct($uid, $loadGrupos = false, $fullName = null, $uidNumber = null, $email=null ) {
-		
+
+	    if ($uid == null) return;
+
 		$this->uid = $uid;
 		
 		$fromQueue = self::seekMRUUid($uid);
@@ -365,7 +367,7 @@ class Usuario implements Serializable {
 	public static function restoreFromSession() {
 		(session_status() != PHP_SESSION_ACTIVE) and session_start();
 		return isset($_SESSION['ctism_user'])
-			? Usuario::unserialize($_SESSION['ctism_user'])
+			? (new Usuario(null))->unserialize($_SESSION['ctism_user'])
 			: null;
 	}
 	

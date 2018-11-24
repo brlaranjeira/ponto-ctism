@@ -25,13 +25,13 @@ class ConfigClass {
      * PERMISSOES DE ACESSO ÀS PÁGINAS
      */
     const paginas = [
-    	'consultar' => [
+        'registrar' => [
+            'nome' => 'Registrar',
+            'permissoes'=> array(Usuario::GRUPO_BOLSISTAS)
+        ], 'consultar' => [
     		'nome' => 'Consultar',
 		    'permissoes'=> '*'
-        ], 'registrar' => [
-		    'nome' => 'Registrar',
-		    'permissoes'=> array(Usuario::GRUPO_BOLSISTAS)
-	    ], 'justificar' => [
+        ], 'justificar' => [
 		    'nome' => 'Justificar',
 		    'permissoes'=> array(Usuario::GRUPO_BOLSISTAS)
 	    ], 'abonar' => [
@@ -41,7 +41,10 @@ class ConfigClass {
 		    'nome' => 'Deferir',
 		    'permissoes'=> array(Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_PROFESSORES)
 	    ]
-	    
+    ];
+
+    const ipsInternos = [
+        '172.17.*.*'
     ];
 
 }
