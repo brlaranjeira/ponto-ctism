@@ -345,7 +345,6 @@ class Usuario implements Serializable {
 	public static function auth($usr,$pw) {
 		require_once (__DIR__ . '/../lib/LDAP/ldap.php');
 		$ldap = new ldap();
-		return new Usuario($usr);
 		if ($ldap->auth($usr,$pw)) {
 			return new Usuario($usr);
 		}
