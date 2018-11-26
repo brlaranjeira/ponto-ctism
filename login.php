@@ -27,7 +27,7 @@ if ( isset($_POST) == !empty($_POST) ) {
     $usuario = Usuario::auth($_POST['usuario'] , $_POST['senha'] );
     if ($usuario != null ) {
         $usuario->saveToSession();
-        header("Location: ./consultar.php");
+        header("Location: ./main.php");
     } else {
         $msg = "Usuario não encontrado";
     }
