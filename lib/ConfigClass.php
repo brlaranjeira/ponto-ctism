@@ -40,11 +40,16 @@ class ConfigClass {
 	    ], 'deferir' => [
 		    'nome' => 'Deferir',
 		    'permissoes'=> array(Usuario::GRUPO_FUNCIONARIOS,Usuario::GRUPO_PROFESSORES)
-	    ]
+	    ], 'relatorio' => [
+	        'nome' => 'Relatório',
+            'permissoes' => array(Usuario::GRUPO_SSI)
+        ]
+
     ];
 
     const ipsInternos = [
-        '172.17.*.*'
+        '172.17.*.*',
+        '200.132.24.4[7,8]'
     ];
 
 }
