@@ -12,7 +12,7 @@ $('#div-deferir') .on("click", ".btn-deferir", function () {
             }, error: function (response) {
                 alert ("ERRO");
             }
-        })
+        });
         window.location.reload();
     })
 

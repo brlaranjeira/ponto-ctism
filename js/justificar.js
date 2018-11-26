@@ -7,27 +7,6 @@ if ($spanMensagem.length) {
     showMessage('[PONTO ELETRÔNICO]',mensagem);
 }
 
-const checkhora = (ts) => {
-    const dtHrPattern = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}$/;
-    if (ts.match(dtHrPattern) == null) {
-        return false;
-    }
-    const [data,horario] = ts.split(' ');
-    const [dia,mes,ano] = data.split('/').map( x => Number.parseInt(x) );
-    const [hora,minuto] = horario.split(':').map( x => Number.parseInt(x) );
-    if (dia > 31 || dia <= 0 || mes <=0 || mes > 12 || ano <= 0 || hora < 0 || hora > 23 || minuto < 0 || minuto > 59) {
-        return false;
-    }
-    const numDias = [31,28,31,30,31,30,31,31,30,31,30,31];
-    if (numDias[mes-1] < dia) {
-        return true
-    }
-    if ( (mes === 2) &&  ( ano % 4 === 0 && ano % 100 !== 0 ) || (ano % 400 === 0) ) { //FEVEREIRO DE ANO BISSEXTO
-        return dia <= 29;
-    }
-    return true;
-};
-
 $('#form-justificar').submit( evt => {
 
     const dthr = document.getElementById('registro-dthr').value;
@@ -35,7 +14,7 @@ $('#form-justificar').submit( evt => {
 
 
     const motivoValido = motivo.length > 0;
-    const dthrOk = checkhora(dthr);
+    const dthrOk = checkDataHora(dthr);
 
     if (motivoValido && dthrOk) {
         $.ajax('./ajax/actionjustificar.php', {

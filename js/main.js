@@ -50,6 +50,44 @@ function confirmModal( mensagem, callbackOk, callbackCancel, labelOk, labelCance
 
 }
 
+const checkData = dt => {
+    const pattern = /^[0-3][0-9]\/[0-1][0-9]\/[0-9]{4}$/;
+    if (dt.match(pattern) == null) {
+        return false;
+    }
+    const [dia,mes,ano] = dt.split('/').map( x => Number.parseInt(x) );
+    if (dia > 31 || dia <= 0 || mes <=0 || mes > 12 || ano <= 0 ) {
+        return false;
+    }
+    const numDias = [31,28,31,30,31,30,31,31,30,31,30,31];
+    if (numDias[mes-1] < dia) {
+        return true
+    }
+    if ( (mes === 2) &&  ( ano % 4 === 0 && ano % 100 !== 0 ) || (ano % 400 === 0) ) { //FEVEREIRO DE ANO BISSEXTO
+        return dia <= 29;
+    }
+    return true;
+};
+
+const checkHora = hr => {
+    const pattern = /^[0-2][0-9]:[0-5][0-9]$/;
+    if (hr.match(pattern) == null) {
+        return false;
+    }
+    const [hora,minuto] = hr.split(':');
+    return hora >= 0 && hora <= 23 && minuto >= 0 && minuto <= 59;
+};
+
+
+const checkDataHora = (ts) => {
+    /*const dtHrPattern = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}$/;
+    if (ts.match(dtHrPattern) == null) {
+        return false;
+    }*/
+    const [data,horario] = ts.split(' ');
+    return checkData(data) && checkHora(horario);
+};
+
 
 
 new Egg("t,h,e,c,a,g,e", function () {
