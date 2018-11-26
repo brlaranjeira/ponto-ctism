@@ -29,31 +29,6 @@ include "./fragment/header.php";
 require_once (__DIR__ . '/dao/Ponto.php');
 require_once (__DIR__ . '/dao/Usuario.php');
 
-if (isset($_POST) && ! empty($_POST)) {
-/*    $usuario = Usuario::restoreFromSession();
-    if (!$usuario->hasGroup(Usuario::GRUPO_BOLSISTAS)) {
-        header('Location: ./main.php');
-        die();
-    }
-    $tsParts = explode(' ' , $_POST['registro-dthr'] );
-    $dtParts = explode('/' , $tsParts[0] );
-    $dt = $dtParts[2] . '-' . $dtParts[1] . '-' . $dtParts[0];
-    $hr = $tsParts[1] . ':00';
-    
-	$ponto = new Ponto();
-	$ponto->setIp();
-	$ponto->setUsuario($usuario);
-	$ponto->setEvent($_POST['registro-evt']);
-	
-	$ponto->setTimestamp("$dt $hr");
-	$ponto->setJust($_POST['registro-motivo']);
-	
-	if ( $ponto->save() ) {
-		$msg = 'Justificativa registrada!';
-	}*/
-}
-
-
 ?>
 
 <div class="container">
