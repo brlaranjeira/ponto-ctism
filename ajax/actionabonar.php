@@ -24,7 +24,6 @@ if (!empty($_POST)) {
 	$ponto->setTimestamp("$data $hora");
 	$ponto->setJust($_POST['motivoabono']);
 	http_response_code(200);
-	/*if ( $ponto->save(null,true,array('deferido','usuarioDeferidor')) ) {*/
 	if ( $ponto->save() ) {
 		$json = [
 			'message' => "Abono solicitado. Deseja enviar e-mail para avisar o(a) coordenador(a) da bolsa?",
