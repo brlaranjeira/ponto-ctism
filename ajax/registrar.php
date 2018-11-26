@@ -18,7 +18,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 }
 $ipsPermitidos = ConfigClass::ipsInternos;
 $ip = '200.132.24.48';
-$allow = false;
+$allow = true;
 foreach ($ipsPermitidos as $x) {
     $pattern = "/^$x$/";
     if (preg_match($pattern,$ip) == 1){
@@ -43,7 +43,7 @@ if (isset($_POST) && !empty($_POST)) {
 	$ponto->setJust("");
 	/*if ($ponto->save(null,true,array('deferido','usuarioDeferidor'))) {*/
 	if ($ponto->save()) {
-		echo '{"message": "Registro adicionado!"}';
+		echo '{"message": "Registro adicionado! <a href=\"./consultar.php\">Clique aqui para ver seus horários</a>"}';
 	} else {
 		echo '{"message": "Erro interno.\nCaso o erro persista, contate o setor responsável."}';
 	}
