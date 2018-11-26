@@ -19,6 +19,7 @@
 </head>
 
 <body>
+<? include './fragment/modais.php';?>
 <div class="container">
 <?
 require_once (__DIR__ . '/dao/Usuario.php');
@@ -28,23 +29,37 @@ if ( isset($_POST) == !empty($_POST) ) {
         $usuario->saveToSession();
         header("Location: ./consultar.php");
     } else {
-        echo "Usuario não encontrado";
+        $msg = "Usuario não encontrado";
     }
 }
 
 ?>
-    <form class="form-signin" method="POST" action="">
+    <form id="form-signin" class="form-signin" method="POST" action="">
         <h2 class="form-signin-heading text-center">Ponto Bolsistas<br /><br /></h2>
         <label for="usuario" class="sr-only">Usuário</label>
 
-        <input type="text" name="usuario" class="form-control" placeholder="Digite seu usuário" autofocus><br />
+        <input id="login-usr" type="text" name="usuario" class="form-control" placeholder="Digite seu usuário" autofocus><br />
 
         <label for="senha" class="sr-only">Senha</label>
-        <input type="password" name="senha" class="form-control" placeholder="Digite sua senha"  >
+        <input id="login-pw" type="password" name="senha" class="form-control" placeholder="Digite sua senha"  >
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Acessar</button><br /><br /><br />
     </form>
 
 </div>
 </body>
+<script type="application/ecmascript" language="ecmascript" src="js/jquery/jquery.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/main.js"></script>
+<script type="application/ecmascript" language="ecmascript" src="js/login.js"></script>
+<?
+if (isset($msg)) {
+    echo '';
+    ?>
+    <script>
+        showMessage('PONTO ELETRÔNICO]','<?=$msg?>','danger');
+    </script>
+    <?
+}
+?>
 </html>
