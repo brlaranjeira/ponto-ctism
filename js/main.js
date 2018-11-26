@@ -1,10 +1,10 @@
 function showMessage ( title , message , tp='success', time = 5000) {
     var cls = 'alert-'+tp;
-    $('#div-alert > #alert-title').text( title.toUpperCase() );
-    $('#div-alert > #alert-message').text( ' ' + message );
-    $('#div-alert').addClass(cls).addClass('in');
+    $('#div-alert > #alert-title').html( title.toUpperCase() + (message.toLowerCase().includes('<br/>') ? '<br/>' : '') );
+    $('#div-alert > #alert-message').html( ' ' + message );
+    $('#div-alert').addClass(cls).addClass('in').show();
     setTimeout( function () {
-        $('#div-alert').removeClass('in').removeClass(cls);
+        $('#div-alert').removeClass('in').removeClass(cls).hide();
     }, time);
 }
 
@@ -80,10 +80,6 @@ const checkHora = hr => {
 
 
 const checkDataHora = (ts) => {
-    /*const dtHrPattern = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}$/;
-    if (ts.match(dtHrPattern) == null) {
-        return false;
-    }*/
     const [data,horario] = ts.split(' ');
     return checkData(data) && checkHora(horario);
 };
