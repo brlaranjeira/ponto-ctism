@@ -8,10 +8,8 @@ if ($spanMensagem.length) {
 }
 
 $('#form-justificar').submit( evt => {
-
     const dthr = document.getElementById('registro-dthr').value;
     const motivo = document.getElementById('registro-motivo').value;
-
 
     const motivoValido = motivo.length > 0;
     const dthrOk = checkDataHora(dthr);
@@ -40,7 +38,7 @@ $('#form-justificar').submit( evt => {
         });
     } else {
         let msg = !dthrOk ? 'Insira uma data válida.' : '';
-        msg += !motivoValido ? ( (msg.length === 0 ? '' : '\t') + 'Insira um motivo.') : '';
+        msg += !motivoValido ? ( (msg.length === 0 ? '' : '<br/>') + 'Insira um motivo.') : '';
         showMessage('[PONTO ELETRÔNICO]',msg,'danger');
     }
     return false;
